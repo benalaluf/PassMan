@@ -2,15 +2,10 @@ from typing import Callable, Any
 import flet as ft
 from enum import Enum
 
-class DataStrategyEnum(Enum):
-    QUERY = 0
-    ROUTER_DATA = 1
-    CLIENT_STORAGE = 2
-    STATE = 3
+
 
 class Router():
-    def __init__(self, data_strategy=DataStrategyEnum.QUERY):
-        self.data_strategy = data_strategy
+    def __init__(self):
         self.data = dict()
         self.routes = {}
         self.body = ft.Container()
@@ -32,7 +27,7 @@ class Router():
             value = item.split("=")[1]
             self.data[key] = value.replace('+', ' ')
 
-        self.body.content = self.routes[_page](self)
+        self.body.content = self.routes[_page]
         self.body.update()
 
     def set_data(self, key, value):

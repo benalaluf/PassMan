@@ -1,37 +1,41 @@
 from typing import Union
 import flet as ft
+from flet_core import UserControl
 
 from src.ui.client.Data import State
 from src.ui.client.views import Router
-from src.ui.client.views.Router import DataStrategyEnum
 
 
-def IndexView(r):
-    def send_data(e: ft.ControlEvent):
-        State("data", text_field.value)
+class IndexView(UserControl):
+
+    def __init__(self):
+        super().__init__()
+
+    def build(self):
+        self.text_field = ft.TextField()
+        self.send_button = ft.ElevatedButton("Send")
+        self.send_button.on_click = self.send_data
+        content = ft.Column(
+            [
+                ft.Row(
+                    [
+                        ft.Text(
+                            "Welcome to my Flet Router Tutorial",
+                            size=50),
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER
+                ),
+                ft.Row(
+                    [
+                        self.text_field,
+                        self.send_button
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER
+                )
+            ]
+        )
+        return content
+
+    def send_data(self, e: ft.ControlEvent):
+        State("data", self.text_field.value)
         e.page.go("/data")
-
-    text_field = ft.TextField()
-    send_button = ft.ElevatedButton("Send")
-    send_button.on_click = send_data
-    content = ft.Column(
-        [
-            ft.Row(
-                [
-                    ft.Text(
-                        "Welcome to my Flet Router Tutorial",
-                        size=50),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER
-            ),
-            ft.Row(
-                [
-                    text_field,
-                    send_button
-                ],
-                alignment=ft.MainAxisAlignment.CENTER
-            )
-        ]
-    )
-
-    return content

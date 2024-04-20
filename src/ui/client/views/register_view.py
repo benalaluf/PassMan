@@ -1,18 +1,23 @@
-
 import flet as ft
+from flet_core import UserControl
 
-def RegisterView(router):
-    
-    content = ft.Column(
-               
+
+class RegisterView(UserControl):
+
+    def __init__(self):
+        super().__init__()
+
+    def build(self):
+        self.content = ft.Column(
+
             [
                 ft.Row(
-                [
-                    ft.Text("My Profile", size=30), 
-                    ft.IconButton(icon=ft.icons.PERSON_ROUNDED, icon_size=30),
-                    ], 
-                alignment=ft.MainAxisAlignment.CENTER
-            ),
+                    [
+                        ft.Text("My Profile", size=30),
+                        ft.IconButton(icon=ft.icons.PERSON_ROUNDED, icon_size=30),
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER
+                ),
                 ft.Row(
                     [
                         ft.Image(src=f"/banner.png", width=200, border_radius=100)
@@ -37,13 +42,4 @@ def RegisterView(router):
 
             ]
         )
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    return content
+        return self.content
