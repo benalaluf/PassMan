@@ -5,9 +5,8 @@ from src.protocol.PacketConstants import PacketConstants
 from src.protocol.PacketData import PacketData
 from src.protocol.PacketType import PacketType
 
-
 class Packet:
-    def __init__(self, packet_type: PacketType, payload: bytes):
+    def __init__(self, packet_type: PacketType, payload: bytes = PacketConstants.NO_DATA):
         self.packet_type = packet_type
         self.payload = payload
         self.packet_bytes = bytes()
@@ -32,6 +31,7 @@ class Packet:
     @staticmethod
     def _pack(pack_format: str, data):
         return struct.pack(pack_format, data)
+
 
 
 def send_packet(sock: socket.socket, packet: Packet):

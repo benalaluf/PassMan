@@ -22,7 +22,6 @@ class RegisterView(UserControl):
             ]
             , width=400, height=600, horizontal_alignment=ft.CrossAxisAlignment.CENTER))
 
-        self.login_button.on_click = self.register
 
         self.content.on_dismiss = lambda e: self.page.go("/")
 
@@ -35,4 +34,4 @@ class RegisterView(UserControl):
         page.window_destroy()
 
     def register(self, e):
-        print(self.username_filed.value, self.password_field.value)
+        print(self.username_field.value, self.password_field.value)

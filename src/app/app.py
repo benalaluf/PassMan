@@ -2,6 +2,7 @@ import flet as ft
 
 from flet_core import UserControl
 
+from src.connections.client_conn import ClientConn
 from src.ui.client.controls.app_bar import NavBar
 from src.ui.client.views.data_view import DataView
 from src.ui.client.views.index_view import IndexView
@@ -10,15 +11,20 @@ from src.ui.client.views.register_view import RegisterView
 
 
 class App(UserControl):
-    def __init__(self, page: ft.Page):
+    def __init__(self):
         super().__init__()
-        self.page = page
         self.data = dict()
         self.routes = {}
         self.body = ft.Container(alignment=ft.alignment.center)
-        self.init()
+        self.conn = ClientConn("127.0.0.1", 8080)
 
-    def init(self):
+        self.index_view = IndexView()
+        self.register_view = RegisterView()
+        self.login_view = LoginView()
+        self.data_view = DataView()
+
+    def init(self, page: ft.Page):
+        self.page = page
         self.page.theme_mode = "light"
         self.page.appbar = NavBar(self.page)
         self.page.on_route_change = self.route_change
@@ -28,11 +34,26 @@ class App(UserControl):
         self.page.go('/')
 
         self.routes = {
-            "/": IndexView(),
-            "/register": RegisterView(),
-            "/login": LoginView(),
-             "/data": DataView(),
+            "/": self.index_view,
+            "/register": self.register_view,
+            "/login": self.login_view,
+            "/data": self.data_view,
         }
+        self.conn.main()
+
+        self.register_view.login_button.on_click = self.register
+        self.login_view.login_button.on_click = self.login
+
+    def register(self, e):
+        mail = self.register_view.mail_field.value
+        username = self.register_view.username_field.value
+        password = self.register_view.password_field.value
+        self.conn.register(username, password, mail)
+
+    def login(self, e):
+        username = self.login_view.username_filed.value
+        password = self.login_view.password_field.value
+        self.conn.login(username, password)
 
     def route_change(self, route):
         self.body.content = self.routes[route.route]
@@ -49,4 +70,5 @@ class App(UserControl):
 
 
 if __name__ == '__main__':
-    ft.app(target=App)
+    app = App()
+    ft.app(target=app.init)
