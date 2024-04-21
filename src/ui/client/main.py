@@ -1,6 +1,6 @@
 import flet as ft
 from views.routes import router
-from user_controls.app_bar import NavBar
+from src.ui.client.controls.app_bar import NavBar
 
 def main(page: ft.Page):
 

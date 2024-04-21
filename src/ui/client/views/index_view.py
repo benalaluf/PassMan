@@ -1,9 +1,7 @@
-from typing import Union
 import flet as ft
 from flet_core import UserControl
 
 from src.ui.client.Data import State
-from src.ui.client.views import Router
 
 
 class IndexView(UserControl):
@@ -20,7 +18,7 @@ class IndexView(UserControl):
                 ft.Row(
                     [
                         ft.Text(
-                            "Welcome to my Flet Router Tutorial",
+                            "Welcome to PassMan",
                             size=50),
                     ],
                     alignment=ft.MainAxisAlignment.CENTER

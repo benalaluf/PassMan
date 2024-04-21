@@ -1,9 +1,7 @@
-from typing import Union
 import flet as ft
 from flet_core import UserControl
 
 from src.ui.client.Data import global_state
-from src.ui.client.views.Router import Router
 
 
 class DataView(UserControl):
