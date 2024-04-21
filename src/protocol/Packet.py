@@ -7,7 +7,7 @@ from src.protocol.PacketType import PacketType
 
 
 class Packet:
-    def __init__(self, packet_type: PacketType, payload: PacketData):
+    def __init__(self, packet_type: PacketType, payload: bytes):
         self.packet_type = packet_type
         self.payload = payload
         self.packet_bytes = bytes()
@@ -33,35 +33,32 @@ class Packet:
     def _pack(pack_format: str, data):
         return struct.pack(pack_format, data)
 
-class SendPacket:
-    @staticmethod
-    def send_packet(sock: socket.socket, packet: Packet):
-        sock.sendall(bytes(packet))
 
-class HandelPacket:
+def send_packet(sock: socket.socket, packet: Packet):
+    sock.sendall(bytes(packet))
 
-    @staticmethod
-    def recv_packet(sock):
-        return Packet.from_bytes(HandelPacket.__recv_raw_packet(sock))
 
-    @staticmethod
-    def __recv_raw_packet(sock):
-        raw_header = HandelPacket.__recv_all(sock, PacketConstants.HEADER_LENGTH)
+def recv_packet(sock):
+    return Packet.from_bytes(__recv_raw_packet(sock))
 
-        if not raw_header:
+
+def __recv_raw_packet(sock):
+    raw_header = __recv_all(sock, PacketConstants.HEADER_LENGTH)
+
+    if not raw_header:
+        return None
+
+    raw_data_len = raw_header[1:5]
+    data_len = struct.unpack(PacketConstants.PAYLOAD_LENGTH_HEADER_FORMAT, raw_data_len)[0]
+    data = __recv_all(sock, data_len)
+    return raw_header + data
+
+
+def __recv_all(sock, data_len):
+    data = bytearray()
+    while len(data) < data_len:
+        packet = sock.recv(data_len - len(data))
+        if not packet:
             return None
-
-        raw_data_len = raw_header[1:5]
-        data_len = struct.unpack(PacketConstants.PAYLOAD_LENGTH_HEADER_FORMAT, raw_data_len)[0]
-        data = HandelPacket.__recv_all(sock, data_len)
-        return raw_header + data
-
-    @staticmethod
-    def __recv_all(sock, data_len):
-        data = bytearray()
-        while len(data) < data_len:
-            packet = sock.recv(data_len - len(data))
-            if not packet:
-                return None
-            data.extend(packet)
-        return data
+        data.extend(packet)
+    return data
