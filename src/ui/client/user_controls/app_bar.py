@@ -10,8 +10,9 @@ def NavBar(page):
         bgcolor=ft.colors.RED,
         actions=[
             ft.IconButton(ft.icons.HOME, on_click=lambda _: page.go('/')),
+            ft.ElevatedButton(text="Login", on_click=lambda _: page.go('/login')),
             ft.ElevatedButton(text="Register", on_click=lambda _: page.go('/register')),
-            ft.ElevatedButton(text="Login", on_click=lambda _: page.go('/login'))
+
         ]
     )
 
