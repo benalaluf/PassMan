@@ -17,7 +17,7 @@ class LoginView(UserControl):
                 self.password_field,
                 self.login_button
             ]
-            , width=400, height=600, horizontal_alignment=ft.CrossAxisAlignment.CENTER))
+            , width=400, height=400, horizontal_alignment=ft.CrossAxisAlignment.CENTER))
 
         self.login_button.on_click = self.login
 

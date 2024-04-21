@@ -22,16 +22,8 @@ class IndexView(UserControl):
                             size=50),
                     ],
                     alignment=ft.MainAxisAlignment.CENTER
-                ),
-                ft.Row(
-                    [
-                        self.text_field,
-                        self.send_button
-                    ],
-                    alignment=ft.MainAxisAlignment.CENTER
-                )
-            ]
         )
+                ])
         return content
 
     def send_data(self, e: ft.ControlEvent):
