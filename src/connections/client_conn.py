@@ -41,8 +41,10 @@ class ClientConn:
             self.session_token = packet_data.get_session_id()
             print("Login successful")
             print("jwt_token =", self.session_token)
+            return True
         else:
             print("Login failed")
+            return False
 
     def register(self, username: str, password: str, mail: str):
         packet_data = RegisterPacketData(username=username, password=password, mail=mail)

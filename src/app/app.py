@@ -3,6 +3,7 @@ import flet as ft
 from flet_core import UserControl
 
 from src.connections.client_conn import ClientConn
+from src.ui.client.Data import Data
 from src.ui.client.controls.app_bar import NavBar
 from src.ui.client.views.data_view import DataView
 from src.ui.client.views.index_view import IndexView
@@ -15,8 +16,8 @@ class App(UserControl):
         super().__init__()
         self.data = dict()
         self.routes = {}
-        self.body = ft.Container(alignment=ft.alignment.center)
-        self.conn = ClientConn("127.0.0.1", 6969)
+        self.body = ft.Container(alignment=ft.alignment.center, expand=True)
+        self.conn = ClientConn("127.0.0.1", 1231)
 
         self.index_view = IndexView()
         self.register_view = RegisterView()
@@ -28,6 +29,7 @@ class App(UserControl):
         self.page.theme_mode = "light"
         self.page.appbar = NavBar(self.page)
         self.page.on_route_change = self.route_change
+        self.page.padding = 0
         self.page.add(
             self.body
         )
@@ -53,11 +55,12 @@ class App(UserControl):
 
 
     def login(self, e):
-        username = self.login_view.username_filed.value
+        username = self.login_view.username_field.value
         password = self.login_view.password_field.value
-        self.conn.login(username, password)
-        print("close")
-        self.login_view.close_dialog()
+        status = self.conn.login(username, password)
+        if status:
+            Data("username", username)
+
         self.page.go('/')
 
     def route_change(self, route):

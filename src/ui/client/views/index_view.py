@@ -1,7 +1,7 @@
 import flet as ft
 from flet_core import UserControl
 
-from src.ui.client.Data import State
+from src.ui.client.Data import GlobalData, global_data
 
 
 class IndexView(UserControl):
@@ -10,12 +10,17 @@ class IndexView(UserControl):
         super().__init__()
 
     def build(self):
+        username = global_data.get_state_by_key("username")
+        if username is None:
+            username = ""
+        else:
+            username = f", {username.get_state()}"
         content = ft.Column(
             [
                 ft.Row(
                     [
                         ft.Text(
-                            "Welcome to PassMan",
+                            f"Welcome to PassMan{username}",
                             size=50),
                     ],
                     alignment=ft.MainAxisAlignment.CENTER

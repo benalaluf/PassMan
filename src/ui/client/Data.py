@@ -1,4 +1,4 @@
-class GlobalState:
+class GlobalData:
   def __init__(self):
     self._state = dict()
 
@@ -8,11 +8,11 @@ class GlobalState:
   def get_state_by_key(self, key: str):
     return self._state.get(key)
   
-global_state = GlobalState()
+global_data = GlobalData()
 
-class State:
+class Data:
   def __init__(self, key: str, value=None):
-    self._global_state = global_state
+    self._global_state = global_data
     self._key = key
     self._value = value
     self.register_with_global()

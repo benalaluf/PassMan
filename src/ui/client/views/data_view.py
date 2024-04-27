@@ -1,7 +1,6 @@
 import flet as ft
 from flet_core import UserControl
 
-from src.ui.client.Data import global_state
 
 
 class DataView(UserControl):
@@ -9,7 +8,7 @@ class DataView(UserControl):
         super().__init__()
 
     def build(self):
-        text = ft.Text("State: " + global_state.get_state_by_key("data").get_state())
+        text = ft.Text("State: " )
         self.content = ft.Column(
             [
                 ft.Row(
