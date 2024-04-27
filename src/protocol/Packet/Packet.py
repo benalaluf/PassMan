@@ -1,9 +1,9 @@
 import socket
 import struct
 
-from src.protocol.PacketConstants import PacketConstants
-from src.protocol.PacketData import PacketData
-from src.protocol.PacketType import PacketType
+from src.protocol.Packet.PacketConstants import PacketConstants
+from src.protocol.Packet.PacketType import PacketType
+
 
 class Packet:
     def __init__(self, packet_type: PacketType, payload: bytes = PacketConstants.NO_DATA):
@@ -43,6 +43,7 @@ def recv_packet(sock):
 
 
 def __recv_raw_packet(sock):
+
     raw_header = __recv_all(sock, PacketConstants.HEADER_LENGTH)
 
     if not raw_header:

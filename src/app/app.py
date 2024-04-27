@@ -16,7 +16,7 @@ class App(UserControl):
         self.data = dict()
         self.routes = {}
         self.body = ft.Container(alignment=ft.alignment.center)
-        self.conn = ClientConn("127.0.0.1", 8080)
+        self.conn = ClientConn("127.0.0.1", 6969)
 
         self.index_view = IndexView()
         self.register_view = RegisterView()
@@ -49,11 +49,16 @@ class App(UserControl):
         username = self.register_view.username_field.value
         password = self.register_view.password_field.value
         self.conn.register(username, password, mail)
+        self.page.go('/')
+
 
     def login(self, e):
         username = self.login_view.username_filed.value
         password = self.login_view.password_field.value
         self.conn.login(username, password)
+        print("close")
+        self.login_view.close_dialog()
+        self.page.go('/')
 
     def route_change(self, route):
         self.body.content = self.routes[route.route]
