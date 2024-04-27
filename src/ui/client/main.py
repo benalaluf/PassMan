@@ -1,4 +1,4 @@
-from flet_core import UserControl
+from flet_core import UserControl, View
 import flet as ft
 
 from src.ui.client.controls.app_bar import NavBar
@@ -13,7 +13,7 @@ class App(UserControl):
         super().__init__()
         self.data = dict()
         self.routes = {}
-        self.body = ft.Container(alignment=ft.alignment.center)
+        self.body = ft.Container(alignment=ft.alignment.center, expand=True)
 
         self.index_view = IndexView()
         self.register_view = RegisterView()
@@ -22,6 +22,7 @@ class App(UserControl):
 
     def init(self, page: ft.Page):
         self.page = page
+        self.page.padding = 0
         self.page.theme_mode = "light"
         self.page.appbar = NavBar(self.page)
         self.page.on_route_change = self.route_change
@@ -46,9 +47,8 @@ class App(UserControl):
         password = self.register_view.password_field.value
         self.page.go('/')
 
-
     def login(self, e):
-        username = self.login_view.username_filed.value
+        username = self.login_view.username_field.value
         password = self.login_view.password_field.value
         self.page.go('/')
 

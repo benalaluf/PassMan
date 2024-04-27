@@ -12,21 +12,32 @@ class RegisterView(UserControl):
         self.password_field = ft.TextField(hint_text="Password", text_size=15)
         self.login_button = ft.ElevatedButton(text="Register", width=200)
 
-        self.content = ft.AlertDialog(content=ft.Column(
+
+        self.register = ft.Container(ft.Column(
             [
                 self.title,
                 self.mail_field,
                 self.username_field,
                 self.password_field,
                 self.login_button
-            ]
-            , width=400, height=600, horizontal_alignment=ft.CrossAxisAlignment.CENTER))
+            ],
+            width=400,
+            height=400,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+            border_radius=14,
+            bgcolor=ft.colors.WHITE,
+            padding=20,
+            border=ft.border.all(color=ft.colors.BLACK, width=2),
+        )
 
-
-        self.content.on_dismiss = lambda e: self.page.go("/")
+        self.content = ft.Container(
+            self.register,
+            alignment=ft.alignment.center,
+            expand=True,
+            bgcolor=ft.colors.GREY_700
+        )
 
     def build(self):
-        self.content.open = True
         return self.content
 
     def exit_app(self, e):
