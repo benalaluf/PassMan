@@ -4,6 +4,7 @@ from socket import socket, AF_INET, SOCK_STREAM
 
 from src.protocol.Packet.Packet import Packet, recv_packet, send_packet
 from src.protocol.Packet.PacketType import PacketType
+from src.protocol.PacketData.AddPassPacketData import AddPassPacketData
 from src.protocol.PacketData.LoginPacketData import LoginPacketData
 from src.protocol.PacketData.RegisterPacketData import RegisterPacketData
 from src.protocol.PacketData.SessionPacketData import SessionPacketData
@@ -59,6 +60,22 @@ class ClientConn:
         else:
             print("Login failed")
 
+    def add_pass(self, url: str, username: str, password: str, date: str):
+        packet_data = AddPassPacketData(
+            jwt_session=self.session_token,
+            url=url, username=username,
+            password=password,
+            date=date
+        )
+
+        packet = Packet(PacketType.ADDPASS, bytes(packet_data))
+        send_packet(self.client_socket, packet)
+        print("Password added successfully")
 
 if __name__ == '__main__':
-    client = ClientConn('127.0.0.1', 8080).main()
+    client = ClientConn('127.0.0.1', 1231)
+    client.main()
+    client.login("ben", "12345")
+    client.add_pass("https://www.google.com", "ben", "12345", "12/12/2020")
+    client.add_pass("https://www.facebook.com", "ben", "12345", "12/12/2020")
+
