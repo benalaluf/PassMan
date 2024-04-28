@@ -17,4 +17,7 @@ class IndexView(View):
         self.controls = [
             self.body
         ]
+        self.index_control = IndexControl()
+        self.register_control = RegisterControl()
+        self.login_control = LoginControl()
 

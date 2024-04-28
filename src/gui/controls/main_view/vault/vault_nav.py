@@ -25,7 +25,8 @@ class VaultNavigationRail(UserControl):
                         height=80,
                         border_radius=10,
                         ink=True,
-                        on_click=lambda e: print("Clickable transparent with Ink clicked!"),
+                        on_click=lambda x:self.page.go('/main/vault/passwords',
+                    ),
                     ),
                     ft.Container(
                         content=ft.Column(controls=[ft.Icon(name=ft.icons.CREDIT_CARD_ROUNDED, color=ft.colors.GREY_800), ft.Text("Cards")],

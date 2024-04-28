@@ -24,7 +24,7 @@ class MainNavMenu(NavigationBar):
     def route(self,e):
         print("Selected destination:", e.control.selected_index)
         if e.control.selected_index == 0:
-            self.page.go('/main/vault')
+            self.page.go('/main/vault/passwords')
         elif e.control.selected_index == 1:
             self.page.go('/security')
         elif e.control.selected_index == 2:

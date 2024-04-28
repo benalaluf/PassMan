@@ -19,11 +19,8 @@ class App(UserControl):
         self.index_view = IndexView()
         self.main_view = MainView()
 
-        self.index_control = IndexControl()
-        self.register_control = RegisterControl()
-        self.login_control = LoginControl()
 
-        self.vault_control = VaultControl()
+
 
     def init(self, page: ft.Page):
         self.page = page
@@ -40,39 +37,41 @@ class App(UserControl):
         self.page.go('/')
 
         self.routes = {
-            "/": self.index_control,
-            "/register": self.register_control,
-            "/login": self.login_control,
-            "/main/vault": self.vault_control
+            "/": self.index_view.index_control,
+            "/register": self.index_view.register_control,
+            "/login": self.index_view.login_control,
+            "/main/vault": self.main_view.vault_control,
+            "/main/vault/passwords": self.main_view.vault_control.passwords_control
         }
 
-        self.register_control.login_button.on_click = self.register
-        self.login_control.login_button.on_click = self.login
+        self.index_view.register_control.login_button.on_click = self.register
+        self.index_view.login_control.login_button.on_click = self.login
 
         self.page.update()
 
     def register(self, e):
-        mail = self.register_control.mail_field.value
-        username = self.register_control.username_field.value
-        password = self.register_control.password_field.value
+        mail = self.index_view.register_control.mail_field.value
+        username = self.index_view.register_control.username_field.value
+        password = self.index_view.register_control.password_field.value
         self.page.go('/main')
 
     def login(self, e):
-        username = self.login_control.username_field.value
-        password = self.login_control.password_field.value
-        self.page.go('/main')
+        username = self.index_view.login_control.username_field.value
+        password = self.index_view.login_control.password_field.value
+        self.page.go('/main/vault/passwords')
 
     def route_change(self, route):
-        if 'main' not in route.route :
+        if not route.route.startswith("/main"):
             self.index_view.body.content = self.routes[route.route]
 
             if self.page.views[0] is not self.index_view:
                 self.page.views.clear()
                 self.page.views.append(self.index_view)
         else:
-
             if route.route != "/main":
-                self.main_view.body.content = self.routes[route.route]
+                if route.route.split("/")[2] == "vault":
+                    self.main_view.vault_control.body.content = self.routes[route.route]
+                    self.main_view.body.content = self.main_view.vault_control
             if self.page.views[0] is not self.main_view:
                 self.page.views.clear()
                 self.page.views.append(self.main_view)

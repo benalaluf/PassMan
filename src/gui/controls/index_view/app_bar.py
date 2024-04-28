@@ -9,9 +9,8 @@ class IndexBar(AppBar):
         self.init()
 
     def init(self):
-
-
-        self.title = ft.Row([ft.Text("PassMan", color='white'), ft.Icon(name=ft.icons.LOCK_PERSON,color=ft.colors.WHITE)])
+        self.title = ft.Row(
+            [ft.Text("PassMan", color='white'), ft.Icon(name=ft.icons.LOCK_PERSON, color=ft.colors.WHITE)])
         self.center_title = False
         self.bgcolor = ft.colors.RED
 
@@ -25,4 +24,3 @@ class IndexBar(AppBar):
                     spacing=5)
                 , padding=10)
         ]
-
