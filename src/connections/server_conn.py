@@ -8,7 +8,7 @@ from src.crypto.jwt_session import generate_secret_key
 
 from src.protocol.Packet.Packet import Packet, send_packet, recv_packet
 from src.protocol.Packet.PacketType import PacketType
-from src.protocol.PacketData.AddPassPacketData import AddPassPacketData
+from src.protocol.PacketData.AddItemPacketData import AddItemPacketData
 from src.protocol.PacketData.LoginPacketData import LoginPacketData
 from src.protocol.PacketData.RegisterPacketData import RegisterPacketData
 from src.protocol.PacketData.SessionPacketData import SessionPacketData
@@ -58,9 +58,10 @@ class ServerConn:
             packetData = LoginPacketData(bytes=packet.payload)
             self.login_user(conn, packetData)
 
-        if packet.packet_type == PacketType.ADDPASS:
-            packetData = AddPassPacketData(bytes=packet.payload)
-            self.add_password(conn, packetData)
+        if packet.packet_type == PacketType.ADDITEM:
+            packetData = AddItemPacketData(packet.payload)
+            if packetData.item_type == "password":
+                self.add_password(conn, packetData)
 
     def login_user(self, conn: socket, packet: LoginPacketData):
         user = self.users_db.find_one({"username": packet.get_username()})
@@ -86,7 +87,7 @@ class ServerConn:
         self.users_db.insert_one(data)
         self.send_session_token(conn, data["username"])
 
-    def add_password(self, conn: socket, packet: AddPassPacketData):
+    def add_password(self, conn: socket, packet: AddItemPacketData):
         user = jwt_session.verify_jwt(packet.jwt_session, self.jwt_secret_key)
         if user:
             data = packet.get_data()
