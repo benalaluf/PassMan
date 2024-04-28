@@ -41,7 +41,9 @@ class App(UserControl):
             "/register": self.index_view.register_control,
             "/login": self.index_view.login_control,
             "/main/vault": self.main_view.vault_control,
-            "/main/vault/passwords": self.main_view.vault_control.passwords_control
+            "/main/vault/passwords": self.main_view.vault_control.passwords_control,
+            "/main/security": self.main_view.security_control,
+            "/main/settings": self.main_view.settings_control
         }
 
         self.index_view.register_control.login_button.on_click = self.register
@@ -72,6 +74,9 @@ class App(UserControl):
                 if route.route.split("/")[2] == "vault":
                     self.main_view.vault_control.body.content = self.routes[route.route]
                     self.main_view.body.content = self.main_view.vault_control
+                else:
+                    self.main_view.body.content = self.routes[route.route]
+
             if self.page.views[0] is not self.main_view:
                 self.page.views.clear()
                 self.page.views.append(self.main_view)

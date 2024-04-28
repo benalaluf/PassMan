@@ -1,7 +1,9 @@
 from flet_core import View, AppBar
 import flet as ft
 from src.gui.controls.main_view.app_bar import MainBar
-from src.gui.controls.main_view.nav_menu import MainNavMenu
+from src.gui.controls.main_view.main_nav import MainNavMenu
+from src.gui.controls.main_view.security.security_control import SecurityControl
+from src.gui.controls.main_view.setttings.settings_control import SettingsControl
 from src.gui.controls.main_view.vault.vault_control import VaultControl
 
 
@@ -16,4 +18,6 @@ class MainView(View):
             self.body
         ]
         self.vault_control = VaultControl()
+        self.security_control = SecurityControl()
+        self.settings_control = SettingsControl()
 
