@@ -19,9 +19,6 @@ class App(UserControl):
         self.index_view = IndexView()
         self.main_view = MainView()
 
-
-
-
     def init(self, page: ft.Page):
         self.page = page
         self.page.padding = 0
@@ -42,6 +39,7 @@ class App(UserControl):
             "/login": self.index_view.login_control,
             "/main/vault": self.main_view.vault_control,
             "/main/vault/passwords": self.main_view.vault_control.passwords_control,
+            "/main/vault/cards": self.main_view.vault_control.cards_control,
             "/main/security": self.main_view.security_control,
             "/main/settings": self.main_view.settings_control
         }
@@ -71,26 +69,24 @@ class App(UserControl):
                 self.page.views.append(self.index_view)
         else:
             if route.route != "/main":
+                if self.page.views[0] is not self.main_view:
+                    self.page.views.clear()
+                    self.page.views.append(self.main_view)
+
                 if route.route.split("/")[2] == "vault":
                     self.main_view.vault_control.body.content = self.routes[route.route]
                     self.main_view.body.content = self.main_view.vault_control
+                    self.page.update()
                 else:
                     self.main_view.body.content = self.routes[route.route]
 
-            if self.page.views[0] is not self.main_view:
-                self.page.views.clear()
-                self.page.views.append(self.main_view)
-
         self.page.update()
         print(route.route)
-        print(self.page.views)
 
-
-    def view_pop(self,e):
+    def view_pop(self, e):
         self.page.views.pop()
         top_view = self.page.views[-1]
         self.page.go(top_view.route)
-
 
     def set_data(self, key, value):
         self.data[key] = value

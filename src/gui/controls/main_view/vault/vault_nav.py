@@ -25,7 +25,7 @@ class VaultNavigationRail(UserControl):
                         height=80,
                         border_radius=10,
                         ink=True,
-                        on_click=lambda x:self.page.go('/main/vault/passwords',
+                        on_click=lambda _:self.page.go('/main/vault/passwords',
                     ),
                     ),
                     ft.Container(
@@ -37,7 +37,7 @@ class VaultNavigationRail(UserControl):
                         height=80,
                         border_radius=10,
                         ink=True,
-                        on_click=lambda e: print("Clickable transparent with Ink clicked!"),
+                        on_click=lambda _: self.page.go("/main/vault/cards")
                     ),
                     ft.Container(
                         content=ft.Column(controls=[ft.Icon(name=ft.icons.EDIT_NOTE_ROUNDED     , color=ft.colors.GREY_800), ft.Text("Notes")],
@@ -70,3 +70,14 @@ class VaultNavigationRail(UserControl):
 
     def build(self):
         return self.content
+
+    def route(self, e):
+        if e.control.selected_index == 0:
+            self.page.go('/main/vault/passwords')
+        elif e.control.selected_index == 1:
+            self.page.go('/main/security')
+        elif e.control.selected_index == 2:
+            self.page.go('/main/settings')
+        else:
+            print("Invalid destination")
+        self.page.update()

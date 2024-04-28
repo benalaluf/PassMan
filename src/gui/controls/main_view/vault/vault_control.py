@@ -1,8 +1,11 @@
 import flet as ft
 from flet_core import UserControl
 
+from src.gui.controls.main_view.vault.cards_control import CardsControl
 from src.gui.controls.main_view.vault.password_control import PasswordControl
 from src.gui.controls.main_view.vault.vault_nav import VaultNavigationRail
+
+
 
 
 
@@ -18,6 +21,7 @@ class VaultControl(UserControl):
             ]
         )
         self.passwords_control = PasswordControl()
+        self.cards_control = CardsControl()
         self.passwords_control.add_passwords(["password1", "password2", "password3"])
 
     def build(self):
