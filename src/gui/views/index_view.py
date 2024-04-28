@@ -1,7 +1,7 @@
 import flet as ft
 from flet_core import UserControl
 
-from src.ui.client.Data import GlobalData, global_data
+from src.gui.Data import global_data
 
 
 class IndexView(UserControl):

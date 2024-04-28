@@ -2,7 +2,7 @@ import flet as ft
 from flet_core import UserControl
 
 
-class LoginView(UserControl):
+class LoginControl(UserControl):
     def __init__(self):
         super().__init__()
         self.title = ft.Text("Login", size=40, )

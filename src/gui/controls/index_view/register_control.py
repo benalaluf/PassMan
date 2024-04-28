@@ -2,7 +2,7 @@ import flet as ft
 from flet_core import UserControl
 
 
-class RegisterView(UserControl):
+class RegisterControl(UserControl):
 
     def __init__(self):
         super().__init__()

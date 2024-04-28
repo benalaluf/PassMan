@@ -1,14 +1,10 @@
+from flet_core import UserControl
 import flet as ft
 
-from flet_core import UserControl
-
-from src.connections.client_conn import ClientConn
-from src.ui.client.Data import Data
-from src.ui.client.controls.app_bar import NavBar
-from src.ui.client.views.data_view import DataView
-from src.ui.client.views.index_view import IndexView
-from src.ui.client.views.login_view import LoginView
-from src.ui.client.views.register_view import RegisterView
+from src.gui.controls.main_view.app_bar import NavBar
+from src.gui.views.index_view import IndexView
+from src.gui.controls.index_view.login_control import LoginControl
+from src.gui.controls.index_view.register_control import RegisterControl
 
 
 class App(UserControl):
@@ -17,19 +13,16 @@ class App(UserControl):
         self.data = dict()
         self.routes = {}
         self.body = ft.Container(alignment=ft.alignment.center, expand=True)
-        self.conn = ClientConn("127.0.0.1", 1231)
 
         self.index_view = IndexView()
-        self.register_view = RegisterView()
-        self.login_view = LoginView()
-        self.data_view = DataView()
-
+        self.register_view = RegisterControl()
+        self.login_view = LoginControl()
     def init(self, page: ft.Page):
         self.page = page
+        self.page.padding = 0
         self.page.theme_mode = "light"
         self.page.appbar = NavBar(self.page)
         self.page.on_route_change = self.route_change
-        self.page.padding = 0
         self.page.add(
             self.body
         )
@@ -39,9 +32,8 @@ class App(UserControl):
             "/": self.index_view,
             "/register": self.register_view,
             "/login": self.login_view,
-            "/data": self.data_view,
         }
-        self.conn.main()
+
 
         self.register_view.login_button.on_click = self.register
         self.login_view.login_button.on_click = self.login
@@ -50,17 +42,11 @@ class App(UserControl):
         mail = self.register_view.mail_field.value
         username = self.register_view.username_field.value
         password = self.register_view.password_field.value
-        self.conn.register(username, password, mail)
         self.page.go('/')
-
 
     def login(self, e):
         username = self.login_view.username_field.value
         password = self.login_view.password_field.value
-        status = self.conn.login(username, password)
-        if status:
-            Data("username", username)
-
         self.page.go('/')
 
     def route_change(self, route):
