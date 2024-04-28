@@ -7,7 +7,9 @@ from src.data.items.password import PasswordData
 from src.protocol.Packet.Packet import Packet, recv_packet, send_packet
 from src.protocol.Packet.PacketType import PacketType
 from src.protocol.PacketData.AddItemPacketData import AddItemPacketData
+from src.protocol.PacketData.GetUserInfoPacketData import GetUserDocPacketData
 from src.protocol.PacketData.LoginPacketData import LoginPacketData
+from src.protocol.PacketData.PacketData import PacketData
 from src.protocol.PacketData.RegisterPacketData import RegisterPacketData
 from src.protocol.PacketData.SessionPacketData import SessionPacketData
 
@@ -62,7 +64,7 @@ class ClientConn:
         else:
             print("Login failed")
 
-    def add_pass(self,password: PasswordData):
+    def add_pass(self, password: PasswordData):
         packet_data = AddItemPacketData(
             asdict(password), item_type="password", jwt_session=self.session_token
         )
@@ -71,8 +73,17 @@ class ClientConn:
         send_packet(self.client_socket, packet)
         print("Password added successfully")
 
+    def get_items(self):
+        packet_data = GetUserDocPacketData(self.session_token)
+        packet = Packet(PacketType.GETUSERDOC, bytes(packet_data))
+        send_packet(self.client_socket, packet)
+        packet = recv_packet(self.client_socket)
+        packet_data = PacketData(data=packet.payload)
+        return packet_data.get_data()
+
+
 if __name__ == '__main__':
-    client = ClientConn('127.0.0.1', 1231)
+    client = ClientConn('127.0.0.1', 3333)
     client.main()
     client.login("ben", "12345")
 
@@ -82,3 +93,6 @@ if __name__ == '__main__':
     client.add_pass(password)
     client.add_pass(password2)
 
+    items = client.get_items()
+
+    print(items)

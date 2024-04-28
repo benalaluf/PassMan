@@ -9,7 +9,9 @@ from src.crypto.jwt_session import generate_secret_key
 from src.protocol.Packet.Packet import Packet, send_packet, recv_packet
 from src.protocol.Packet.PacketType import PacketType
 from src.protocol.PacketData.AddItemPacketData import AddItemPacketData
+from src.protocol.PacketData.GetUserInfoPacketData import GetUserDocPacketData
 from src.protocol.PacketData.LoginPacketData import LoginPacketData
+from src.protocol.PacketData.PacketData import PacketData
 from src.protocol.PacketData.RegisterPacketData import RegisterPacketData
 from src.protocol.PacketData.SessionPacketData import SessionPacketData
 
@@ -62,6 +64,9 @@ class ServerConn:
             packetData = AddItemPacketData(packet.payload)
             if packetData.item_type == "password":
                 self.add_password(conn, packetData)
+        if packet.packet_type == PacketType.GETUSERDOC:
+            packetData = GetUserDocPacketData(packet.payload)
+            self.send_user_data(conn, packetData.jwt_session)
 
     def login_user(self, conn: socket, packet: LoginPacketData):
         user = self.users_db.find_one({"username": packet.get_username()})
@@ -91,19 +96,27 @@ class ServerConn:
         user = jwt_session.verify_jwt(packet.jwt_session, self.jwt_secret_key)
         if user:
             data = packet.get_data()
-            self.users_db.update_one({"username": user}, {"$push": {"items.passwords":data}}, upsert=True)
+            self.users_db.update_one({"username": user}, {"$push": {"items.passwords": data}}, upsert=True)
 
     def send_session_token(self, conn: socket, username: str):
         session_token = jwt_session.generate_jwt(username, self.jwt_secret_key)
-        print(session_token)
         packetData = SessionPacketData(session_id=session_token)
         packet = Packet(PacketType.SESSION, bytes(packetData))
         send_packet(conn, packet)
+
+    def send_user_data(self, conn: socket, session: str):
+        username = jwt_session.verify_jwt(session, self.jwt_secret_key)
+        user = self.users_db.find_one({"username": username})
+        if user:
+            user.pop("_id")
+            packetData = PacketData(data=user)
+            packet = Packet(PacketType.DATA, bytes(packetData))
+            send_packet(conn, packet)
 
     def handel_client(self, client):
         pass
 
 
 if __name__ == '__main__':
-    server = ServerConn(('127.0.0.1', 1231), ('127.0.0.1', 27017))
+    server = ServerConn(('127.0.0.1', 3333), ('127.0.0.1', 27017))
     server.accept_connections()
