@@ -4,8 +4,8 @@ from flet_core import UserControl
 
 from src.connections.client_conn import ClientConn
 from src.gui.Data import Data
-from src.gui.controls.main_view.app_bar import NavBar
-from src.gui.views.index_view import IndexView
+from src.gui.controls.main_view.app_bar import MainBar
+from src.gui.controls.index_view.index import IndexControl
 from src.gui.controls.index_view.login_control import LoginControl
 from src.gui.controls.index_view.register_control import RegisterControl
 
@@ -18,14 +18,14 @@ class App(UserControl):
         self.body = ft.Container(alignment=ft.alignment.center, expand=True)
         self.conn = ClientConn("127.0.0.1", 1231)
 
-        self.index_view = IndexView()
+        self.index_view = IndexControl()
         self.register_view = RegisterControl()
         self.login_view = LoginControl()
 
     def init(self, page: ft.Page):
         self.page = page
         self.page.theme_mode = "light"
-        self.page.appbar = NavBar(self.page)
+        self.page.appbar = MainBar(self.page)
         self.page.on_route_change = self.route_change
         self.page.padding = 0
         self.page.add(
