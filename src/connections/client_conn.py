@@ -61,8 +61,10 @@ class ClientConn:
             packet_data = SessionPacketData(bytes=packet.payload)
             self.session_token = packet_data.get_session_id()
             print("Login successful")
+            return True
         else:
             print("Login failed")
+            return False
 
     def add_pass(self, password: PasswordData):
         packet_data = AddItemPacketData(

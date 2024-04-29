@@ -96,27 +96,31 @@ class App(UserControl):
         mail = self.index_view.register_control.mail_field.value
         username = self.index_view.register_control.username_field.value
         password = self.index_view.register_control.password_field.value
-        self.conn.register(username, password, mail)
-        self.page.go('/')
+        status = self.conn.register(username, password, mail)
+        if status:
+            self.page.go('/main/vault/passwords')
+            self.update_gui_with_user_data()
 
     def update_gui_with_user_data(self):
-        self.main_view.main_bar.user_name_text.value = f"Wellcome, {self.user_data.get('username')}"
-        self.main_view.vault_control.passwords_control.update_passwords(self.user_data.get('items').get('passwords'))
+        print("updateing")
+        self.user_data = self.conn.get_user_data()
+        print(self.user_data)
+        self.main_view.update_view(self.user_data)
+        self.page.update()
 
     def login(self, e):
         username = self.index_view.login_control.username_field.value
         password = self.index_view.login_control.password_field.value
         status = self.conn.login(username, password)
         if status:
-            self.user_data = self.conn.get_user_data()
-            print(self.user_data)
-        self.page.go('/main/vault/passwords')
-        self.update_gui_with_user_data()
+            self.page.go('/main/vault/passwords')
+            self.update_gui_with_user_data()
 
     def add_password(self, e):
         password = self.main_view.vault_control.passwords_control.password_form.get_password_data()
         self.conn.add_pass(password)
         self.main_view.vault_control.passwords_control.password_form.close_dlg(e)
+        self.update_gui_with_user_data()
         print("save pass")
 
     def set_data(self, key, value):

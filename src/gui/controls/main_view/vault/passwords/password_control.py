@@ -45,7 +45,7 @@ class PasswordControl(UserControl):
         self.password_counter.value = f"Passwords: {len(self.password_list)} "
 
     def update_passwords(self, passwords):
-        # self.password_list = []
+        self.password_list.clear()
         for password in passwords:
             self.password_list.append(PasswordContainer(PasswordData(**password)))
         self.password_counter.value = f"Passwords: {len(self.password_list)} "

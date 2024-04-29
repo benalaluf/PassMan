@@ -22,3 +22,16 @@ class MainView(View):
         self.security_control = SecurityControl()
         self.settings_control = SettingsControl()
 
+    def update_view(self, user_data):
+        self.main_bar.user_name_text.value = f"Wellcome, {user_data.get('username')}"
+        items = user_data.get('items')
+        if items:
+            passwords = items.get('passwords')
+            cards = items.get('cards')
+            if passwords:
+                self.vault_control.passwords_control.update_passwords(passwords)
+            if cards:
+                pass
+
+        self.vault_control.passwords_control.update()
+        self.vault_control.passwords_control.list.update()
