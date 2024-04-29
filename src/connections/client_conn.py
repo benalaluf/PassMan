@@ -4,6 +4,7 @@ from dataclasses import asdict
 from socket import socket, AF_INET, SOCK_STREAM
 
 from src.data.items.password import PasswordData
+from src.misc.singletone import Singleton
 from src.protocol.Packet.Packet import Packet, recv_packet, send_packet
 from src.protocol.Packet.PacketType import PacketType
 from src.protocol.PacketData.AddItemPacketData import AddItemPacketData
@@ -14,20 +15,17 @@ from src.protocol.PacketData.RegisterPacketData import RegisterPacketData
 from src.protocol.PacketData.SessionPacketData import SessionPacketData
 
 
-class ClientConn:
+class ClientConn(metaclass=Singleton):
 
-    def __init__(self, ip: str, port: int):
-        self.server_addr = (ip, port)
+    def __init__(self):
         self.client_socket = socket(AF_INET, SOCK_STREAM)
         self.session_token = None
+        self.connected = False
 
-    def main(self):
-        self.connect_to_server()
-
-    def connect_to_server(self):
+    def connect_to_server(self, ip: str, port: int):
         try:
-            self.client_socket.connect(self.server_addr)
-            print(f'CONNECTED {self.server_addr}')
+            self.client_socket.connect((ip, port))
+            print(f'CONNECTED {(ip, port)}')
             self.connected = True
 
         except Exception as e:

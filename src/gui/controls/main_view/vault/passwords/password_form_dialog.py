@@ -30,10 +30,7 @@ class PasswordFormDialog(ft.UserControl):
             ft.Text(self.text, size=30, color=ft.colors.BLUE)
         ])
 
-
-
         self.save_button = ft.TextButton("Save")
-
 
         self.password_data_container = ft.Container(
             ft.Column(controls=[
@@ -47,7 +44,7 @@ class PasswordFormDialog(ft.UserControl):
         )
 
         self.dialog = ft.AlertDialog(
-            title= self.title,
+            title=self.title,
             content=self.password_data_container,
             bgcolor=ft.colors.WHITE,
             actions=[self.save_button]
@@ -64,9 +61,13 @@ class PasswordFormDialog(ft.UserControl):
         self.dialog.open = True
         e.control.page.update()
 
-    def close_dlg(self,e):
+    def save_edit(self):
+        pass
+
+    def close_dlg(self, e):
         self.dialog.open = False
         e.control.page.update()
+
     def get_password_data(self):
         password_data = PasswordData(
             self.url_field.value,
@@ -81,5 +82,6 @@ class PasswordFormDialog(ft.UserControl):
         current_date = datetime.now()
         formatted_date = current_date.strftime("%d/%m/%y")
         return formatted_date
+
     def build(self):
         return self.content

@@ -13,21 +13,22 @@ from src.gui.views.main_view import MainView
 
 
 class App(UserControl):
-    def __init__(self, ip, port):
-        super().__init__()
+    def __init__(self, *args, **kwargs):
         self.data = dict()
         self.routes = {}
 
         self.index_view = IndexView()
         self.main_view = MainView()
 
-        self.conn = ClientConn(ip, port)
+        self.conn = ClientConn()
+
 
         self.user_data = None
 
-    def main(self):
-        self.init_conn()
+    def main(self, ip, port):
+        self.init_conn(ip, port)
         ft.app(target=self.init_gui)
+
 
     def init_gui(self, page: ft.Page):
         self.page = page
@@ -59,10 +60,11 @@ class App(UserControl):
         self.index_view.login_control.login_button.on_click = self.login
         self.main_view.vault_control.passwords_control.password_form.save_button.on_click = self.add_password
 
+
         self.page.update()
 
-    def init_conn(self):
-        self.conn.main()
+    def init_conn(self, ip, port):
+        self.conn.connect_to_server(ip, port)
 
     def route_change(self, route):
         if not route.route.startswith("/main"):
@@ -134,5 +136,6 @@ class App(UserControl):
 
 
 if __name__ == '__main__':
-    app = App('127.0.0.1', 1231)
-    app.main()
+    app = App()
+    app.main("127.0.0.1", 1231)
+
