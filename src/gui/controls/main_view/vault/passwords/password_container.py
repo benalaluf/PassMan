@@ -14,7 +14,7 @@ class PasswordContainer(UserControl):
 
     def init(self):
         self.copy_button = ft.IconButton(ft.icons.COPY, icon_color=ft.colors.BLUE,
-                                         on_click=lambda e: print("Copy clicked!"))
+                                         on_click=lambda e: self.page.set_clipboard(self.password_data.password))
 
 
         self.dialog = PasswordDataDialog(self.password_data)
@@ -48,7 +48,7 @@ class PasswordContainer(UserControl):
             height=80,
             border_radius=10,
             ink=True,
-                on_click= self.dialog.open_dlg,
+            on_click= self.dialog.open_dlg,
             bgcolor=ft.colors.GREY_200, padding=ft.Padding(20, 0, 10, 0))
 
     def build(self):
