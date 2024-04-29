@@ -11,17 +11,26 @@ class PasswordFormDialog(ft.UserControl):
         super().__init__()
         self.password_data = password_data
         self.content = None
+        self.url_field = ft.TextField(label="URL/Name")
+        self.username_field = ft.TextField(label="Username")
+        self.password_field = ft.TextField(label="Password")
+
+        if password_data:
+            self.text = "Password Edit"
+            self.url_field.value = password_data.url
+            self.username_field.value = password_data.username
+            self.password_field.value = password_data.password
+        else:
+            self.text = "Add Password"
         self.init()
 
     def init(self):
         self.title = ft.Row(controls=[
             ft.Icon(ft.icons.LOCK, size=30, color=ft.colors.BLUE),
-            ft.Text("Add Password", size=30, color=ft.colors.BLUE)
+            ft.Text(self.text, size=30, color=ft.colors.BLUE)
         ])
 
-        self.url_field = ft.TextField(label="URL/Name")
-        self.username_field = ft.TextField(label="Username")
-        self.password_field = ft.TextField(label="Password")
+
 
         self.save_button = ft.TextButton("Save")
 
@@ -47,7 +56,10 @@ class PasswordFormDialog(ft.UserControl):
         self.content = self.dialog
 
     def open_dlg(self, e):
-        self.url_field.value = ''
+        if not self.password_data:
+            self.url_field.value = ""
+            self.username_field.value = ""
+            self.password_field.value = ""
         e.control.page.dialog = self.dialog
         self.dialog.open = True
         e.control.page.update()

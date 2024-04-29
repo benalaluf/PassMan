@@ -14,10 +14,15 @@ class PasswordDataDialog(ft.UserControl):
     def init(self):
         self.password_data_container = ft.Container(
             ft.Column(controls=[
-                ft.Text("URL: " + self.password_data.url, size=16),
-                ft.Text("Username: " + self.password_data.username, size=16),
-                ft.Text("Password: " + self.password_data.password, size=16),
-                ft.Text("date: " + self.password_data.date, size=16)
+                ft.Icon(ft.icons.LOCK, size=30, color=ft.colors.BLUE),
+                ft.Text("URL: " + self.password_data.url, size=20),
+                ft.Text("Username: " + self.password_data.username, size=20),
+                ft.TextField("Password: " + self.password_data.password,
+                             text_size=20,
+                             can_reveal_password=True,
+                             password=True,
+                             border=ft.InputBorder.NONE),
+                ft.Text("date: " + self.password_data.date, size=20),
             ]
             ),
             width=400, height=200,
