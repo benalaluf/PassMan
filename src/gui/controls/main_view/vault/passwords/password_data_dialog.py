@@ -25,7 +25,7 @@ class PasswordDataDialog(ft.UserControl):
 
         self.dialog = ft.AlertDialog(
             content=self.password_data_container,
-            bgcolor=ft.colors.GREY_200
+            bgcolor=ft.colors.WHITE
         )
 
         self.content = self.dialog
@@ -34,5 +34,6 @@ class PasswordDataDialog(ft.UserControl):
         e.control.page.dialog = self.dialog
         self.dialog.open = True
         e.control.page.update()
+
     def build(self):
         return self.content

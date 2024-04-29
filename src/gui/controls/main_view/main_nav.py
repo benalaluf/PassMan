@@ -16,8 +16,9 @@ class MainNavMenu(NavigationBar):
             )
         ]
         self.height = 80
-        self.bgcolor = ft.colors.WHITE
+        self.surface_tint_color = ft.colors.BLUE_GREY
         self.elevation = 3
+        self.indicator_color = ft.colors.RED
         self.on_change = self.route
         self.disabled = False
 
