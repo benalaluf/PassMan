@@ -2,6 +2,7 @@ from flet_core import UserControl, ListView
 import flet as ft
 
 from src.data.items.password import PasswordData
+from src.gui.controls.main_view.vault.passwords.password_add_button import PasswordAddButton
 from src.gui.controls.main_view.vault.passwords.password_container import PasswordContainer
 
 
@@ -10,6 +11,7 @@ class PasswordControl(UserControl):
     def __init__(self):
         super().__init__()
         self.content = None
+        self.password_list = []
         self.init()
 
     def init(self):
@@ -35,7 +37,19 @@ class PasswordControl(UserControl):
             spacing=10
         )
 
-        self.content = ft.Container(self.list, padding=ft.Padding(10, 10, 10, 10))
+        self.add_button = PasswordAddButton()
+
+        self.password_counter = ft.Text("Passwords: " + str(len(self.password_list)), size=20)
+
+        self.content = ft.Container(
+            ft.Column(controls=[
+                ft.Row(controls=[
+                    self.password_counter,
+                    self.add_button,
+                ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=900),
+                self.list
+            ], horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+            , padding=ft.Padding(10, 10, 10, 10))
 
     def update_passwords(self, passwords):
         self.password_list = passwords

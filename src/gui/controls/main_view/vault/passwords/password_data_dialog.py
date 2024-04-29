@@ -20,11 +20,12 @@ class PasswordDataDialog(ft.UserControl):
                 ft.Text("date: " + self.password_data.date, size=16)
             ]
             ),
-            width=400, height=200
+            width=400, height=200,
         )
 
         self.dialog = ft.AlertDialog(
             content=self.password_data_container,
+            bgcolor=ft.colors.GREY_200
         )
 
         self.content = self.dialog
