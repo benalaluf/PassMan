@@ -4,8 +4,10 @@ from enum import Enum
 class PacketType(Enum):
     REGISTER = 1
     LOGIN = 2
-    ADDPASS = 3
-    READPASS = 4
+    ADDITEM = 3
+    DELETEITEM = 9
+    GETUSERDOC= 4
+    DATA=10
     REQ = 5
     SESSION = 6
     SUCCESS = 69

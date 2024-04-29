@@ -8,7 +8,11 @@ from src.crypto.jwt_session import generate_secret_key
 
 from src.protocol.Packet.Packet import Packet, send_packet, recv_packet
 from src.protocol.Packet.PacketType import PacketType
+from src.protocol.PacketData.AddItemPacketData import AddItemPacketData
+from src.protocol.PacketData.DeleteItemPacketData import DeleteItemPacketData
+from src.protocol.PacketData.GetUserInfoPacketData import GetUserDocPacketData
 from src.protocol.PacketData.LoginPacketData import LoginPacketData
+from src.protocol.PacketData.PacketData import PacketData
 from src.protocol.PacketData.RegisterPacketData import RegisterPacketData
 from src.protocol.PacketData.SessionPacketData import SessionPacketData
 
@@ -57,6 +61,21 @@ class ServerConn:
             packetData = LoginPacketData(bytes=packet.payload)
             self.login_user(conn, packetData)
 
+        if packet.packet_type == PacketType.ADDITEM:
+            packetData = AddItemPacketData(packet.payload)
+            if packetData.item_type == "password":
+                self.add_password(conn, packetData)
+
+        if packet.packet_type == PacketType.DELETEITEM:
+            print("deleteasdfadfasdfasdfasdf")
+            packetData = DeleteItemPacketData(packet.payload)
+            if packetData.item_type == "password":
+                self.delete_password(conn, packetData)
+
+        if packet.packet_type == PacketType.GETUSERDOC:
+            packetData = GetUserDocPacketData(packet.payload)
+            self.send_user_data(conn, packetData.jwt_session)
+
     def login_user(self, conn: socket, packet: LoginPacketData):
         user = self.users_db.find_one({"username": packet.get_username()})
         if user is None:
@@ -81,17 +100,62 @@ class ServerConn:
         self.users_db.insert_one(data)
         self.send_session_token(conn, data["username"])
 
+    def add_password(self, conn: socket, packet: AddItemPacketData):
+        user = jwt_session.verify_jwt(packet.jwt_session, self.jwt_secret_key)
+        if user:
+            data = packet.get_data()
+            print(data)
+
+            # Check if a password with the same ID already exists
+            existing_password = self.users_db.find_one({"username": user, "items.passwords.id": data["id"]})
+
+            if existing_password:
+                # Update the existing password
+                self.users_db.update_one(
+                    {"username": user, "items.passwords.id": data["id"]},
+                    {"$set": {"items.passwords.$": data}}
+                )
+                print("Password object updated.")
+            else:
+                # Create a new password object
+                self.users_db.update_one(
+                    {"username": user},
+                    {"$push": {"items.passwords": data}},
+                    upsert=True
+                )
+                print("New password object added.")
+
+    def delete_password(self, conn: socket, packet: DeleteItemPacketData):
+        print("delete")
+        user = jwt_session.verify_jwt(packet.jwt_session, self.jwt_secret_key)
+        if user:
+            data = packet.get_data()
+            print(data)
+            existing_password = self.users_db.update_one(
+                {"username": user, "items.passwords.id": data["id"]},
+                {"$pull": {"items.passwords": {"id": data["id"]}}}
+            )
+
+            print("deleted password object.", existing_password)
+
     def send_session_token(self, conn: socket, username: str):
         session_token = jwt_session.generate_jwt(username, self.jwt_secret_key)
-        print(session_token)
         packetData = SessionPacketData(session_id=session_token)
         packet = Packet(PacketType.SESSION, bytes(packetData))
         send_packet(conn, packet)
 
-    def handel_client(self, client):
-        pass
+    def send_user_data(self, conn: socket, session: str):
+        username = jwt_session.verify_jwt(session, self.jwt_secret_key)
+        user = self.users_db.find_one({"username": username})
+        if user:
+            user.pop("_id")
+            packetData = PacketData(data=user)
+            packet = Packet(PacketType.DATA, bytes(packetData))
+            send_packet(conn, packet)
+
+
 
 
 if __name__ == '__main__':
-    server = ServerConn(('127.0.0.1', 1231), ('127.0.0.1', 27017))
+    server = ServerConn(('127.0.0.1', 1234), ('127.0.0.1', 27017))
     server.accept_connections()
