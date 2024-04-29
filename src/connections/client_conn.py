@@ -21,6 +21,9 @@ class ClientConn(metaclass=Singleton):
     def __init__(self):
         self.client_socket = socket(AF_INET, SOCK_STREAM)
         self.session_token = None
+        self.key = None
+        self.key_salt = None
+        self.password =None
         self.connected = False
 
     def connect_to_server(self, ip: str, port: int):
@@ -36,6 +39,7 @@ class ClientConn(metaclass=Singleton):
 
     def login(self, username: str, password: str):
         packet_data = LoginPacketData(username=username, password=password)
+        self.password = password
         packet = Packet(PacketType.LOGIN, bytes(packet_data))
         send_packet(self.client_socket, packet)
 
