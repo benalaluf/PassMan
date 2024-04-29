@@ -47,8 +47,9 @@ class PasswordControl(UserControl):
         self.passwords.controls.append(password_container)
         self.update()
 
-    def remove_password(self, password):
-        self.passwords.controls.remove(password)
+    def remove_password(self, password_container, password_data):
+        self.passwords.controls.remove(password_container)
+        ClientConn().delete_pass(password_data)
         self.update()
 
     def edit_password(self, password:PasswordData):

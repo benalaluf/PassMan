@@ -8,6 +8,7 @@ from src.misc.singletone import Singleton
 from src.protocol.Packet.Packet import Packet, recv_packet, send_packet
 from src.protocol.Packet.PacketType import PacketType
 from src.protocol.PacketData.AddItemPacketData import AddItemPacketData
+from src.protocol.PacketData.DeleteItemPacketData import DeleteItemPacketData
 from src.protocol.PacketData.GetUserInfoPacketData import GetUserDocPacketData
 from src.protocol.PacketData.LoginPacketData import LoginPacketData
 from src.protocol.PacketData.PacketData import PacketData
@@ -72,6 +73,15 @@ class ClientConn(metaclass=Singleton):
         packet = Packet(PacketType.ADDITEM, bytes(packet_data))
         send_packet(self.client_socket, packet)
         print("Password added successfully")
+
+    def delete_pass(self, password: PasswordData):
+        packet_data = DeleteItemPacketData(
+            asdict(password), item_type="password", jwt_session=self.session_token
+        )
+
+        packet = Packet(PacketType.DELETEITEM, bytes(packet_data))
+        send_packet(self.client_socket, packet)
+        print("Password deleted successfully")
 
     def add_pass(self, password: PasswordData):
         packet_data = AddItemPacketData(

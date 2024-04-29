@@ -9,6 +9,7 @@ from src.crypto.jwt_session import generate_secret_key
 from src.protocol.Packet.Packet import Packet, send_packet, recv_packet
 from src.protocol.Packet.PacketType import PacketType
 from src.protocol.PacketData.AddItemPacketData import AddItemPacketData
+from src.protocol.PacketData.DeleteItemPacketData import DeleteItemPacketData
 from src.protocol.PacketData.GetUserInfoPacketData import GetUserDocPacketData
 from src.protocol.PacketData.LoginPacketData import LoginPacketData
 from src.protocol.PacketData.PacketData import PacketData
@@ -65,6 +66,12 @@ class ServerConn:
             if packetData.item_type == "password":
                 self.add_password(conn, packetData)
 
+        if packet.packet_type == PacketType.DELETEITEM:
+            print("deleteasdfadfasdfasdfasdf")
+            packetData = DeleteItemPacketData(packet.payload)
+            if packetData.item_type == "password":
+                self.delete_password(conn, packetData)
+
         if packet.packet_type == PacketType.GETUSERDOC:
             packetData = GetUserDocPacketData(packet.payload)
             self.send_user_data(conn, packetData.jwt_session)
@@ -118,6 +125,19 @@ class ServerConn:
                 )
                 print("New password object added.")
 
+    def delete_password(self, conn: socket, packet: DeleteItemPacketData):
+        print("delete")
+        user = jwt_session.verify_jwt(packet.jwt_session, self.jwt_secret_key)
+        if user:
+            data = packet.get_data()
+            print(data)
+            existing_password = self.users_db.update_one(
+                {"username": user, "items.passwords.id": data["id"]},
+                {"$pull": {"items.passwords": {"id": data["id"]}}}
+            )
+
+            print("deleted password object.", existing_password)
+
     def send_session_token(self, conn: socket, username: str):
         session_token = jwt_session.generate_jwt(username, self.jwt_secret_key)
         packetData = SessionPacketData(session_id=session_token)
@@ -137,5 +157,5 @@ class ServerConn:
 
 
 if __name__ == '__main__':
-    server = ServerConn(('127.0.0.1', 3333), ('127.0.0.1', 27017))
+    server = ServerConn(('127.0.0.1', 1234), ('127.0.0.1', 27017))
     server.accept_connections()

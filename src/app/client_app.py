@@ -125,4 +125,4 @@ class App(UserControl):
 
 if __name__ == '__main__':
     app = App()
-    app.main("127.0.0.1", 9999)
+    app.main("127.0.0.1", 3332)

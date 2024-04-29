@@ -92,7 +92,7 @@ class PasswordContainer(UserControl):
         self.username_label.value = self.password_data.username
 
     def remove_password_clicked(self, e):
-        self.remove_password(self)
+        self.remove_password(self,self.password_data)
 
     def build(self):
         return self.content
