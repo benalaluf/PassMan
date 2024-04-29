@@ -1,6 +1,7 @@
 from flet_core import UserControl, ListView
 import flet as ft
 
+from src.connections.client_conn import ClientConn
 from src.data.items.password import PasswordData
 from src.gui.controls.main_view.vault.passwords.password_add_button import PasswordAddButton
 from src.gui.controls.main_view.vault.passwords.password_container import PasswordContainer
@@ -12,45 +13,46 @@ class PasswordControl(UserControl):
     def __init__(self):
         super().__init__()
         self.content = None
-        self.password_list = []
         self.init()
 
     def init(self):
-        self.list = ft.ListView(
-            controls=self.password_list,
+        self.passwords = ft.Column(
             expand=True,
             width=900,
             spacing=10
         )
 
+        self.passwords.scroll = ft.ScrollMode.ALWAYS
+
         self.add_button = PasswordAddButton()
-        self.password_form = PasswordFormDialog()
+        self.password_form = PasswordFormDialog(add_password=self.add_password)
 
         self.add_button.button.on_click = self.password_form.open_dlg
 
-        self.password_counter = ft.Text("Passwords: " + str(len(self.password_list)), size=20)
+        self.password_counter = ft.Text("Passwords: " + str(len(self.passwords.controls)), size=20)
 
-        self.content = ft.Container(
+        self.view = ft.Container(
             ft.Column(controls=[
                 ft.Row(controls=[
                     self.password_counter,
                     self.add_button,
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=900),
-                self.list
+                self.passwords
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER)
             , padding=ft.Padding(10, 10, 10, 10))
 
-    def append_password(self, password):
-        self.password_list.append(PasswordContainer(PasswordData(**password)))
-        self.password_counter.value = f"Passwords: {len(self.password_list)} "
+    def add_password(self, password: PasswordData):
+        password_container = PasswordContainer(password, self.remove_password)
+        ClientConn().add_pass(password)
+        self.passwords.controls.append(password_container)
+        self.update()
 
-    def update_passwords(self, passwords):
-        self.password_list.clear()
-        for password in passwords:
-            self.password_list.append(PasswordContainer(PasswordData(**password)))
-        self.password_counter.value = f"Passwords: {len(self.password_list)} "
+    def remove_password(self, password):
+        self.passwords.controls.remove(password)
+        self.update()
+
+    def edit_password(self, password):
+        pass
 
     def build(self):
-        return self.content
-
-
+        return self.view

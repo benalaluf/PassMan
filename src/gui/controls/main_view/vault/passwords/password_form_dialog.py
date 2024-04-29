@@ -8,9 +8,12 @@ from src.data.items.password import PasswordData
 
 class PasswordFormDialog(ft.UserControl):
 
-    def __init__(self, password_data: PasswordData = None):
+    def __init__(self, add_password: callable= None, password_data: PasswordData = None, ):
+
         super().__init__()
         self.password_data = password_data
+        self.add_password = add_password
+
         self.content = None
         self.url_field = ft.TextField(label="URL/Name")
         self.username_field = ft.TextField(label="Username")
@@ -32,6 +35,7 @@ class PasswordFormDialog(ft.UserControl):
         ])
 
         self.save_button = ft.TextButton("Save")
+        self.save_button.on_click = self.add_password_clicked
 
         self.password_data_container = ft.Container(
             ft.Column(controls=[
@@ -62,12 +66,13 @@ class PasswordFormDialog(ft.UserControl):
         self.dialog.open = True
         e.control.page.update()
 
+    def add_password_clicked(self, e):
+        self.add_password(self.get_password_data())
+        self.close_dlg()
+        self.dialog.update()
 
-
-
-    def close_dlg(self, e):
+    def close_dlg(self):
         self.dialog.open = False
-        e.control.page.update()
 
     def get_password_data(self):
         password_data = PasswordData(

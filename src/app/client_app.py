@@ -56,7 +56,6 @@ class App(UserControl):
 
         self.index_view.register_control.login_button.on_click = self.register
         self.index_view.login_control.login_button.on_click = self.login
-        self.main_view.vault_control.passwords_control.password_form.save_button.on_click = self.add_password
 
         self.page.update()
 
@@ -98,14 +97,10 @@ class App(UserControl):
         status = self.conn.register(username, password, mail)
         if status:
             self.page.go('/main/vault/passwords')
-            self.update_gui_with_user_data()
+            user_data = self.conn.get_user_data()
+            self.main_view.update_view(user_data)
 
-    def update_gui_with_user_data(self):
-        print("updateing")
-        self.user_data = self.conn.get_user_data()
-        print(self.user_data)
-        self.main_view.update_view(self.user_data)
-        self.page.update()
+
 
     def login(self, e):
         username = self.index_view.login_control.username_field.value
@@ -113,14 +108,8 @@ class App(UserControl):
         status = self.conn.login(username, password)
         if status:
             self.page.go('/main/vault/passwords')
-            self.update_gui_with_user_data()
-
-    def add_password(self, e):
-        password = self.main_view.vault_control.passwords_control.password_form.get_password_data()
-        self.conn.add_pass(password)
-        self.main_view.vault_control.passwords_control.password_form.close_dlg(e)
-        self.update_gui_with_user_data()
-        print("save pass")
+            user_data = self.conn.get_user_data()
+            self.main_view.update_view(user_data)
 
 
 
