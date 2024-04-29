@@ -3,11 +3,6 @@ import flet as ft
 from flet_core import UserControl, Theme
 
 from src.connections.client_conn import ClientConn
-from src.gui.Data import Data
-from src.gui.controls.main_view.app_bar import MainBar
-from src.gui.controls.index_view.index import IndexControl
-from src.gui.controls.index_view.login_control import LoginControl
-from src.gui.controls.index_view.register_control import RegisterControl
 from src.gui.views.index_view import IndexView
 from src.gui.views.main_view import MainView
 

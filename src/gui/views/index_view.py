@@ -1,11 +1,10 @@
-from flet_core import UserControl, View
+from flet_core import View
 import flet as ft
 
 from src.gui.controls.index_view.app_bar import IndexBar
-from src.gui.controls.main_view.app_bar import MainBar
 from src.gui.controls.index_view.index import IndexControl
-from src.gui.controls.index_view.login_control import LoginControl
-from src.gui.controls.index_view.register_control import RegisterControl
+from src.gui.controls.index_view.auth.login_control import LoginControl
+from src.gui.controls.index_view.auth.register_control import RegisterControl
 
 
 class IndexView(View):
