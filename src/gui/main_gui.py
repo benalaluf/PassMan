@@ -53,7 +53,7 @@ class App(UserControl):
         mail = self.index_view.register_control.mail_field.value
         username = self.index_view.register_control.username_field.value
         password = self.index_view.register_control.password_field.value
-        self.page.go('/main')
+        self.page.go('/main/vault/passwords')
 
     def login(self, e):
         username = self.index_view.login_control.username_field.value

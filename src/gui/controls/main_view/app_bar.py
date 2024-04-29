@@ -20,7 +20,7 @@ class MainBar(AppBar):
                 ft.Row(
                     [
                         ft.Text("User, test", color="white", ),
-                        ft.ElevatedButton(text="Signout", color="red", on_click=lambda _: self.page.go('/register'))
+                        ft.ElevatedButton(text="Signout", color="red", on_click=lambda _: self.page.go('/'))
                     ],
                     spacing=10)
                 , padding=10)

@@ -1,8 +1,7 @@
-from flet_core import UserControl, ListView
-import flet as ft
+from flet_core import UserControl
 
 from src.data.items.password import PasswordData
-
+import flet as ft
 
 class PasswordContainer(UserControl):
     def __init__(self, password_data: PasswordData):
@@ -44,41 +43,6 @@ class PasswordContainer(UserControl):
             ink=True,
             on_click=lambda e: print("Clickable transparent with Ink clicked!"),
             bgcolor=ft.colors.GREY_200, padding=ft.Padding(20, 0, 10, 0))
-
-    def build(self):
-        return self.content
-
-
-class PasswordControl(UserControl):
-
-    def __init__(self):
-        super().__init__()
-        self.content = None
-        self.init()
-
-    def init(self):
-        self.password_list = [
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-
-        ]
-        self.list = ft.ListView(
-            controls=self.password_list,
-            expand=True,
-            width=900,
-            spacing=10
-        )
-
-        self.content = ft.Container(self.list)
-
-    def add_passwords(self, passwords):
-        pass
 
     def build(self):
         return self.content
