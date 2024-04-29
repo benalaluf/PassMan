@@ -42,7 +42,7 @@ class PasswordControl(UserControl):
             , padding=ft.Padding(10, 10, 10, 10))
 
     def add_password(self, password: PasswordData):
-        password_container = PasswordContainer(password, self.remove_password)
+        password_container = PasswordContainer(password, self.remove_password, self.edit_password)
         ClientConn().add_pass(password)
         self.passwords.controls.append(password_container)
         self.update()
@@ -51,8 +51,9 @@ class PasswordControl(UserControl):
         self.passwords.controls.remove(password)
         self.update()
 
-    def edit_password(self, password):
-        pass
+    def edit_password(self, password:PasswordData):
+        ClientConn().add_pass(password)
+        self.update()
 
     def build(self):
         return self.view
