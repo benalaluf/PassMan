@@ -24,7 +24,7 @@ class PasswordFormDialog(ft.UserControl):
         self.password_field = ft.TextField(label="Password")
 
         self.save_button = ft.TextButton("Save")
-        self.save_button.on_click = self.close_dlg #DELETE THIS LINE
+
 
         self.password_data_container = ft.Container(
             ft.Column(controls=[
