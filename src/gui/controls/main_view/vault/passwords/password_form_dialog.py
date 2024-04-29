@@ -2,6 +2,7 @@ from datetime import datetime
 
 import flet as ft
 
+from src.connections.client_conn import ClientConn
 from src.data.items.password import PasswordData
 
 
@@ -61,8 +62,8 @@ class PasswordFormDialog(ft.UserControl):
         self.dialog.open = True
         e.control.page.update()
 
-    def save_edit(self):
-        pass
+
+
 
     def close_dlg(self, e):
         self.dialog.open = False
@@ -73,8 +74,10 @@ class PasswordFormDialog(ft.UserControl):
             self.url_field.value,
             self.username_field.value,
             self.password_field.value,
-            self.get_current_date()
+            self.get_current_date(),
         )
+        if self.password_data:
+            password_data.id = self.password_data.id
 
         return password_data
 

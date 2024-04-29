@@ -34,4 +34,3 @@ class MainView(View):
                 pass
 
         self.vault_control.passwords_control.update()
-        self.vault_control.passwords_control.list.update()

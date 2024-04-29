@@ -97,7 +97,26 @@ class ServerConn:
         user = jwt_session.verify_jwt(packet.jwt_session, self.jwt_secret_key)
         if user:
             data = packet.get_data()
-            self.users_db.update_one({"username": user}, {"$push": {"items.passwords": data}}, upsert=True)
+            print(data)
+
+            # Check if a password with the same ID already exists
+            existing_password = self.users_db.find_one({"username": user, "items.passwords.id": data["id"]})
+
+            if existing_password:
+                # Update the existing password
+                self.users_db.update_one(
+                    {"username": user, "items.passwords.id": data["id"]},
+                    {"$set": {"items.passwords.$": data}}
+                )
+                print("Password object updated.")
+            else:
+                # Create a new password object
+                self.users_db.update_one(
+                    {"username": user},
+                    {"$push": {"items.passwords": data}},
+                    upsert=True
+                )
+                print("New password object added.")
 
     def send_session_token(self, conn: socket, username: str):
         session_token = jwt_session.generate_jwt(username, self.jwt_secret_key)

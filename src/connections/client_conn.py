@@ -73,6 +73,15 @@ class ClientConn(metaclass=Singleton):
         send_packet(self.client_socket, packet)
         print("Password added successfully")
 
+    def add_pass(self, password: PasswordData):
+        packet_data = AddItemPacketData(
+            asdict(password), item_type="password", jwt_session=self.session_token
+        )
+
+        packet = Packet(PacketType.ADDITEM, bytes(packet_data))
+        send_packet(self.client_socket, packet)
+        print("Password added successfully")
+
     def get_user_data(self):
         packet_data = GetUserDocPacketData(self.session_token)
         packet = Packet(PacketType.GETUSERDOC, bytes(packet_data))

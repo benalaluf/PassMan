@@ -1,4 +1,5 @@
 import datetime
+import uuid
 from dataclasses import dataclass, asdict
 
 
@@ -8,14 +9,15 @@ class PasswordData:
     username: str
     password: str
     date: str
+    id:str = None
+
+    def __post_init__(self):
+        if self.id is None:
+            self.id = str(uuid.uuid4())
 
 
 if __name__ == '__main__':
     s = PasswordData("url", "ben", "1234", str(datetime.datetime.now()))
-
-    d = asdict(s)
-    print(d)
-    for key,value in d.items():
-        d[key] = value+"a"
-
-    print(d)
+    s2 = PasswordData("url", "ben", "1234", str(datetime.datetime.now()))
+    print(s)
+    print(s2)

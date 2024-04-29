@@ -22,13 +22,11 @@ class App(UserControl):
 
         self.conn = ClientConn()
 
-
         self.user_data = None
 
     def main(self, ip, port):
         self.init_conn(ip, port)
         ft.app(target=self.init_gui)
-
 
     def init_gui(self, page: ft.Page):
         self.page = page
@@ -59,7 +57,6 @@ class App(UserControl):
         self.index_view.register_control.login_button.on_click = self.register
         self.index_view.login_control.login_button.on_click = self.login
         self.main_view.vault_control.passwords_control.password_form.save_button.on_click = self.add_password
-
 
         self.page.update()
 
@@ -125,6 +122,8 @@ class App(UserControl):
         self.update_gui_with_user_data()
         print("save pass")
 
+
+
     def set_data(self, key, value):
         self.data[key] = value
 
@@ -138,4 +137,3 @@ class App(UserControl):
 if __name__ == '__main__':
     app = App()
     app.main("127.0.0.1", 1231)
-

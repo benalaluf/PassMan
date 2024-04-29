@@ -1,5 +1,6 @@
 from flet_core import UserControl
 
+from src.connections.client_conn import ClientConn
 from src.data.items.password import PasswordData
 import flet as ft
 
@@ -11,18 +12,20 @@ class PasswordContainer(UserControl):
     def __init__(self, password_data: PasswordData):
         super().__init__()
         self.password_data = password_data
+        self.edit_dialog = PasswordFormDialog(self.password_data)
         self.init()
 
     def init(self):
-        self.edit_dialog = PasswordFormDialog(self.password_data)
+
+        self.edit_dialog.save_button.on_click = self.save_edit
 
         self.copy_button = ft.IconButton(ft.icons.COPY, icon_color=ft.colors.BLUE,
                                          on_click=lambda e: self.page.set_clipboard(self.password_data.password))
         self.edit_button = ft.IconButton(ft.icons.EDIT, icon_color=ft.colors.BLUE)
-        self.delete_button = ft.IconButton(ft.icons.DELETE, icon_color=ft.colors.RED)
 
         self.edit_button.on_click = self.edit_dialog.open_dlg
 
+        self.delete_button = ft.IconButton(ft.icons.DELETE, icon_color=ft.colors.RED)
         self.dialog = PasswordDataDialog(self.password_data)
         self.content = ft.Container(
             content=ft.Row(
@@ -69,6 +72,13 @@ class PasswordContainer(UserControl):
 
         )
 
-
+    def save_edit(self, e):
+        conn = ClientConn()
+        password_data = self.edit_dialog.get_password_data()
+        conn.add_pass(password_data)
+        self.password_data = password_data
+        self.edit_dialog.close_dlg(e)
+        self.content.update()
+        self.page.update()
     def build(self):
         return self.content
