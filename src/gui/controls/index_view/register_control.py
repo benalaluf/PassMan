@@ -9,7 +9,7 @@ class RegisterControl(UserControl):
         self.title = ft.Text("Register", size=40, )
         self.mail_field = ft.TextField(hint_text="Mail", text_size=15)
         self.username_field = ft.TextField(hint_text="Username", text_size=15)
-        self.password_field = ft.TextField(hint_text="Password", text_size=15)
+        self.password_field = ft.TextField(hint_text="Password", text_size=15, password=True, can_reveal_password=True)
         self.login_button = ft.ElevatedButton(text="Register", width=200)
 
 

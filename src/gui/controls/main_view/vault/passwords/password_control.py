@@ -4,6 +4,7 @@ import flet as ft
 from src.data.items.password import PasswordData
 from src.gui.controls.main_view.vault.passwords.password_add_button import PasswordAddButton
 from src.gui.controls.main_view.vault.passwords.password_container import PasswordContainer
+from src.gui.controls.main_view.vault.passwords.password_form_dialog import PasswordFormDialog
 
 
 class PasswordControl(UserControl):
@@ -37,7 +38,11 @@ class PasswordControl(UserControl):
             spacing=10
         )
 
+
         self.add_button = PasswordAddButton()
+        self.password_form = PasswordFormDialog()
+
+        self.add_button.button.on_click = self.password_form.open_dlg
 
         self.password_counter = ft.Text("Passwords: " + str(len(self.password_list)), size=20)
 

@@ -7,7 +7,7 @@ class LoginControl(UserControl):
         super().__init__()
         self.title = ft.Text("Login", size=40, )
         self.username_field = ft.TextField(hint_text="Username", text_size=15)
-        self.password_field = ft.TextField(hint_text="Password", text_size=15)
+        self.password_field = ft.TextField(hint_text="Password",  password=True, can_reveal_password=True,text_size=15)
         self.login_button = ft.ElevatedButton(text="Login", width=200)
 
         self.login = ft.Container(ft.Column(
