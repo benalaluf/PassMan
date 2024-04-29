@@ -1,9 +1,9 @@
 import flet as ft
 from flet_core import UserControl
 
-from src.gui.controls.main_view.vault.cards_control import CardsControl
+from src.gui.controls.main_view.vault.cards.cards_control import CardsControl
 from src.gui.controls.main_view.vault.passwords.password_control import PasswordControl
-from src.gui.controls.main_view.vault.vault_nav import VaultNavigationRail
+from src.gui.controls.main_view.vault.vault_navigation import VaultNavigationRail
 
 
 

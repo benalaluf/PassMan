@@ -3,6 +3,9 @@ from flet_core import UserControl
 from src.data.items.password import PasswordData
 import flet as ft
 
+from src.gui.controls.main_view.vault.passwords.password_data_dialog import PasswordDataDialog
+
+
 class PasswordContainer(UserControl):
     def __init__(self, password_data: PasswordData):
         super().__init__()
@@ -12,6 +15,10 @@ class PasswordContainer(UserControl):
     def init(self):
         self.copy_button = ft.IconButton(ft.icons.COPY, icon_color=ft.colors.BLUE,
                                          on_click=lambda e: print("Copy clicked!"))
+
+
+        self.dialog = PasswordDataDialog(self.password_data)
+
         self.content = ft.Container(
             content=ft.Row(
                 [
@@ -41,7 +48,7 @@ class PasswordContainer(UserControl):
             height=80,
             border_radius=10,
             ink=True,
-            on_click=lambda e: print("Clickable transparent with Ink clicked!"),
+                on_click= self.dialog.open_dlg,
             bgcolor=ft.colors.GREY_200, padding=ft.Padding(20, 0, 10, 0))
 
     def build(self):
