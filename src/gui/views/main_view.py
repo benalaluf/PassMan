@@ -12,7 +12,8 @@ class MainView(View):
         super().__init__()
         self.body = ft.Container(alignment=ft.alignment.center, expand=True)
         self.padding = 0
-        self.appbar = MainBar(self.page)
+        self.main_bar =MainBar(self.page)
+        self.appbar = self.main_bar
         self.navigation_bar = MainNavMenu(self.page)
         self.controls = [
             self.body

@@ -14,14 +14,17 @@ class MainBar(AppBar):
             [ft.Text("PassMan", color='white'), ft.Icon(name=ft.icons.LOCK_PERSON, color=ft.colors.WHITE)])
         self.bgcolor = ft.colors.RED
         # self.leading = self.menu_button
+        self.user_name_text = ft.Text(f"Wellcome,", color="white")
 
         self.actions = [
             ft.Container(
                 ft.Row(
                     [
-                        ft.Text("User, test", color="white", ),
+                        self.user_name_text,
                         ft.ElevatedButton(text="Signout", color="red", on_click=lambda _: self.page.go('/'))
                     ],
                     spacing=10)
                 , padding=10)
         ]
+
+

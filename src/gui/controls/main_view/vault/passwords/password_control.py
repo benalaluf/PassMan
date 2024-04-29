@@ -16,28 +16,12 @@ class PasswordControl(UserControl):
         self.init()
 
     def init(self):
-        self.password_list = [
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-            PasswordContainer(PasswordData("https://www.google.com", "test", "test", "test")),
-
-        ]
         self.list = ft.ListView(
             controls=self.password_list,
             expand=True,
             width=900,
             spacing=10
         )
-
 
         self.add_button = PasswordAddButton()
         self.password_form = PasswordFormDialog()
@@ -56,13 +40,15 @@ class PasswordControl(UserControl):
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER)
             , padding=ft.Padding(10, 10, 10, 10))
 
-    def update_passwords(self, passwords):
-        self.password_list = passwords
-        self.list.update()
-
     def append_password(self, password):
-        self.password_list.append(password)
-        self.list.update()
+        self.password_list.append(PasswordContainer(PasswordData(**password)))
+        self.password_counter.value = f"Passwords: {len(self.password_list)} "
+
+    def update_passwords(self, passwords):
+        # self.password_list = []
+        for password in passwords:
+            self.password_list.append(PasswordContainer(PasswordData(**password)))
+        self.password_counter.value = f"Passwords: {len(self.password_list)} "
 
     def build(self):
         return self.content

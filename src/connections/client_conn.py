@@ -73,7 +73,7 @@ class ClientConn:
         send_packet(self.client_socket, packet)
         print("Password added successfully")
 
-    def get_items(self):
+    def get_user_data(self):
         packet_data = GetUserDocPacketData(self.session_token)
         packet = Packet(PacketType.GETUSERDOC, bytes(packet_data))
         send_packet(self.client_socket, packet)
@@ -93,6 +93,6 @@ if __name__ == '__main__':
     client.add_pass(password)
     client.add_pass(password2)
 
-    items = client.get_items()
+    items = client.get_user_data()
 
     print(items)

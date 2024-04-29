@@ -64,6 +64,7 @@ class ServerConn:
             packetData = AddItemPacketData(packet.payload)
             if packetData.item_type == "password":
                 self.add_password(conn, packetData)
+
         if packet.packet_type == PacketType.GETUSERDOC:
             packetData = GetUserDocPacketData(packet.payload)
             self.send_user_data(conn, packetData.jwt_session)
@@ -113,8 +114,7 @@ class ServerConn:
             packet = Packet(PacketType.DATA, bytes(packetData))
             send_packet(conn, packet)
 
-    def handel_client(self, client):
-        pass
+
 
 
 if __name__ == '__main__':
