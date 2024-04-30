@@ -1,8 +1,14 @@
 __author__ = 'Ben'
 
+import hashlib
+from base64 import urlsafe_b64encode
 from dataclasses import asdict
 from socket import socket, AF_INET, SOCK_STREAM
 
+from cryptography.fernet import Fernet
+
+from src.crypto.aes import aes_encrypt, aes_decrypt
+from src.crypto.pbkdf import generate_key_from_password
 from src.data.items.password import PasswordData
 from src.misc.singletone import Singleton
 from src.protocol.Packet.Packet import Packet, recv_packet, send_packet
@@ -56,6 +62,7 @@ class ClientConn(metaclass=Singleton):
             print("jwt_token =", self.session_token)
             self.password = password
             self.username = username
+            self.get_user_key()
             return True
         else:
             print("Login failed")
@@ -80,18 +87,25 @@ class ClientConn(metaclass=Singleton):
             print(packet_data.packet_data)
             self.session_token = packet_data.get("data")
             print("Register successful")
+            self.password = password
+            self.username = username
+            self.get_user_key()
             return True
         else:
             print("Register failed")
             return False
 
     def add_password(self, password: PasswordData):
+        item_data = asdict(password)
+        self.encrypt_item(item_data)
+
         data = {
             "session": self.session_token,
             "type": "add_item",
             "item_type": "password",
-            "item_data": asdict(password),
+            "item_data": item_data,
         }
+
 
         packet_data = PacketData(
             data
@@ -131,10 +145,48 @@ class ClientConn(metaclass=Singleton):
         if packet.packet_type == PacketType.SUCCESS:
             packet_data = PacketData(packet.payload)
             print("got items")
-            return packet_data.get("data")
+            encrypted_items = packet_data.get("data")
+            self.decrypt_items(encrypted_items)
+            return encrypted_items
             print("didnt got items")
         return None
 
+    def decrypt_items(self, items: dict):
+        for items_type in items.values():
+            for item in items_type:
+                self.decrypt_item(item)
+
+    def encrypt_item(self, item):
+        for k, value in item.items():
+            if k == "id":
+                continue
+            item[k] = aes_encrypt(self.key, value)
+
+    def decrypt_item(self, item):
+        for k, value in item.items():
+            if k == "id":
+                continue
+            item[k] = aes_decrypt(self.key, value)
+    def get_user_key(self):
+        data = {
+            "session": self.session_token,
+            "type": "key_salt"
+        }
+
+        packet_data = PacketData(data)
+        packet = Packet(PacketType.GET, bytes(packet_data))
+        send_packet(self.client_socket, packet)
+
+        packet = recv_packet(self.client_socket)
+        if packet.packet_type == PacketType.SUCCESS:
+            packet_data = PacketData(packet.payload)
+            print("got key")
+            self.key_salt = packet_data.get("data")
+            print(self.key_salt)
+            self.key = generate_key_from_password(self.password, self.key_salt)
+            return packet_data.get("data")
+            print("didnt got key")
+        return None
 
 if __name__ == '__main__':
     client = ClientConn()
@@ -153,4 +205,4 @@ if __name__ == '__main__':
 
     items = client.get_user_items()
 
-    print(items)
+    p

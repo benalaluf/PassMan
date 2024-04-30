@@ -112,8 +112,9 @@ class ServerConn:
             self.users_db.insert_one(data)
             self.send_session_token(conn, data["username"])
             print("user register")
-        self.send_fail(conn, "register")
-        print("register failed")
+        else:
+            self.send_fail(conn, "register")
+            print("register failed")
 
     def send_session_token(self, conn: socket, username: str):
         session_token = jwt_session.generate_jwt(username, self.jwt_secret_key)

@@ -30,13 +30,19 @@ class MainView(View):
         self.main_bar.user_name_text.value = f"Wellcome, {ClientConn().username}"
         self.update()
         if items:
-            passwords = items.get('passwords')
+            print(items)
+            passwords = items.get('password')
             cards = items.get('cards')
             if passwords:
                 for password in passwords:
                     self.vault_control.passwords_control.add_password(PasswordData(**password))
 
+
             if cards:
                 pass
 
+
+
             self.vault_control.passwords_control.update()
+
+
