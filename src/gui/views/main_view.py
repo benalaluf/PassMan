@@ -44,6 +44,5 @@ class MainView(View):
 
             self.vault_control.passwords_control.update()
 
-        self.update()
 
 

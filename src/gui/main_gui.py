@@ -39,6 +39,7 @@ class App(UserControl):
             "/main/vault/cards": self.main_view.vault_control.cards_control,
             "/main/security": self.main_view.security_control,
             "/main/security/2fa": self.main_view.security_control.enable_two_fa,
+            "/main/security/password_breach": self.main_view.security_control.enable_two_fa,
             "/main/settings": self.main_view.settings_control
         }
 
@@ -60,6 +61,7 @@ class App(UserControl):
         self.page.go('/main/vault/passwords')
 
     def route_change(self, route):
+        print(route.route)
         if not route.route.startswith("/main"):
             self.index_view.body.content = self.routes[route.route]
 
@@ -80,7 +82,6 @@ class App(UserControl):
                     self.main_view.body.content = self.routes[route.route]
 
         self.page.update()
-        print(route.route)
 
     def view_pop(self, e):
         self.page.views.pop()

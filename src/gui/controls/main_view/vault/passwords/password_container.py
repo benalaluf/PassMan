@@ -30,7 +30,7 @@ class PasswordContainer(UserControl):
 
         self.view_dialog = PasswordDataDialog(self.password_data)
 
-        self.url_label = ft.Text(self.password_data.url, size=20)
+        self.url_label = ft.Text(self.password_data.url, size=20,weight=ft.FontWeight.BOLD)
         self.username_label = ft.Text(self.password_data.username, size=15)
 
         self.content = ft.Container(
