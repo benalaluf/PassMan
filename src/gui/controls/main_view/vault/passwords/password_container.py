@@ -74,7 +74,9 @@ class PasswordContainer(UserControl):
             border_radius=10,
             ink=True,
             on_click=self.view_dialog.open_dlg,
-            bgcolor=ft.colors.GREY_200, padding=ft.Padding(20, 0, 10, 0)
+            bgcolor= ft.colors.ON_INVERSE_SURFACE,
+
+            padding=ft.Padding(20, 0, 10, 0)
 
         )
 

@@ -35,7 +35,7 @@ class PasswordDataDialog(ft.UserControl):
 
         self.dialog = ft.AlertDialog(
             content=self.password_data_container,
-            bgcolor=ft.colors.WHITE
+            bgcolor=ft.colors.BACKGROUND,
         )
 
         self.content = self.dialog

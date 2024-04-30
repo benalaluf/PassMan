@@ -58,7 +58,7 @@ class PasswordDataBreach(ft.UserControl):
                 ),
                 expand=True,
                 border_radius=14,
-                bgcolor=ft.colors.GREY_100,
+                bgcolor=ft.colors.BACKGROUND,
                 padding=20,
                 margin=ft.Margin(100,20,100,20),
                 border=ft.border.all(color=ft.colors.BLACK, width=2),
