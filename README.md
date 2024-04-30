@@ -1,2 +1,1 @@
-# PassMan
-secure password manager
+# passwordman

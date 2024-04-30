@@ -1,0 +1,49 @@
+AUTH = 1
+type: register - login - 2fa
+mail:
+username:
+password
+2fa_code:
+
+POST
+session:
+type: add_item - delete_item
+item_type: password - card - note - contact
+item_data:
+    password:
+        name:
+        password:
+        url:
+        notes:
+    card:
+        name:
+        card_number:
+        expiration_date:
+        cvv:
+        notes:
+    note:
+        name:
+        note:
+    contact:
+        name:
+        phone:
+        email:
+        notes:
+
+
+
+GET = 4
+session:
+type: items - key_salt
+
+
+SUCCESS = 69
+type: items - key_salt - session
+data: {}
+
+
+
+FAIL = 42
+type: items - key_salt - session - login - register
+data: str
+
