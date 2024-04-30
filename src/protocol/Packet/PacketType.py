@@ -2,8 +2,7 @@ from enum import Enum
 
 
 class PacketType(Enum):
-    REGISTER = 1
-    LOGIN = 2
+    AUTH = 1
     POST = 3
     GET = 4
     SUCCESS = 69

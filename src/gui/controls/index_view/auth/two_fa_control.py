@@ -1,5 +1,8 @@
 import flet as ft
 
+from src.connections.client_conn import ClientConn
+from src.crypto.two_fa import verify_otp
+
 
 class TwoFAControl(ft.UserControl):
     def __init__(self):
@@ -18,7 +21,6 @@ class TwoFAControl(ft.UserControl):
 
 
 
-        self.login_button.on_click = self.login
 
         self.login = ft.Container(ft.Column(
             [
@@ -42,9 +44,7 @@ class TwoFAControl(ft.UserControl):
             bgcolor=ft.colors.GREY_700
         )
 
-    def login(self, e):
-        self.code_field.error_text = "Invalid code"
-        self.update()
+
     def build(self):
         return self.content
 

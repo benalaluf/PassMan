@@ -46,38 +46,73 @@ class ClientConn(metaclass=Singleton):
 
     def login(self, username: str, password: str):
         data = {
+            "type": "login",
             "username": username,
             "password": password
         }
 
         packet_data = PacketData(data)
-        packet = Packet(PacketType.LOGIN, bytes(packet_data))
+        packet = Packet(PacketType.AUTH, bytes(packet_data))
         send_packet(self.client_socket, packet)
 
         packet = recv_packet(self.client_socket)
         if packet.packet_type == PacketType.SUCCESS:
             packet_data = PacketData(packet.payload)
-            self.session_token = packet_data.get("data")
-            print("Login successful")
-            print("jwt_token =", self.session_token)
-            self.password = password
-            self.username = username
-            self.get_user_key()
-            return True
+            success_type = packet_data.get("type")
+            if success_type == "session":
+                self.session_token = packet_data.get("data")
+                print("Login successful")
+                print("jwt_token =", self.session_token)
+                self.password = password
+                self.username = username
+                self.get_user_key()
+                return "Success"
+            else:
+                self.password = password
+                self.username = username
+                return "2fa"
+
+
         else:
             print("Login failed")
-            return False
+            return "Fail"
+
+    def two_fa(self, code):
+        data = {
+            "type": "2fa",
+            "code": code,
+            "username": self.username
+        }
+
+        packet_data = PacketData(data)
+        packet = Packet(PacketType.AUTH, bytes(packet_data))
+        send_packet(self.client_socket, packet)
+
+        packet = recv_packet(self.client_socket)
+        if packet.packet_type == PacketType.SUCCESS:
+            packet_data = PacketData(packet.payload)
+            success_type = packet_data.get("type")
+            if success_type == "session":
+                self.session_token = packet_data.get("data")
+                print("Login successful")
+                print("jwt_token =", self.session_token)
+                self.get_user_key()
+                return "Success"
+            else:
+                return "Fail"
+        return "Fail"
 
     def register(self, username: str, password: str, mail: str):
 
         data = {
+            "type": "register",
             "username": username,
             "password": password,
             "mail": mail
         }
 
         packet_data = PacketData(data)
-        packet = Packet(PacketType.REGISTER, bytes(packet_data))
+        packet = Packet(PacketType.AUTH, bytes(packet_data))
         send_packet(self.client_socket, packet)
 
         packet = recv_packet(self.client_socket)
@@ -105,7 +140,6 @@ class ClientConn(metaclass=Singleton):
             "item_type": "password",
             "item_data": item_data,
         }
-
 
         packet_data = PacketData(
             data
@@ -151,6 +185,16 @@ class ClientConn(metaclass=Singleton):
             print("didnt got items")
         return None
 
+    def enable_2fa(self, twofa_token):
+        data = {
+            "session": self.session_token,
+            "type": "2fa",
+            "data": twofa_token
+        }
+        packet_data = PacketData(data)
+        packet = Packet(PacketType.POST, bytes(packet_data))
+        send_packet(self.client_socket, packet)
+
     def decrypt_items(self, items: dict):
         for items_type in items.values():
             for item in items_type:
@@ -167,6 +211,7 @@ class ClientConn(metaclass=Singleton):
             if k == "id":
                 continue
             item[k] = aes_decrypt(self.key, value)
+
     def get_user_key(self):
         data = {
             "session": self.session_token,
@@ -187,6 +232,7 @@ class ClientConn(metaclass=Singleton):
             return packet_data.get("data")
             print("didnt got key")
         return None
+
 
 if __name__ == '__main__':
     client = ClientConn()

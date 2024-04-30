@@ -5,6 +5,7 @@ from pymongo import MongoClient
 
 from src.crypto import hashing, jwt_session
 from src.crypto.jwt_session import generate_secret_key
+from src.crypto.two_fa import verify_otp
 
 from src.protocol.Packet.Packet import Packet, send_packet, recv_packet
 from src.protocol.Packet.PacketType import PacketType
@@ -55,11 +56,14 @@ class ServerConn:
     def handel_packet(self, conn: socket, packet: Packet):
         packetData = PacketData(packet.payload)
         print(packetData.packet_data)
-        if packet.packet_type == PacketType.LOGIN:
-            self.login_user(conn, packetData)
-
-        if packet.packet_type == PacketType.REGISTER:
-            self.register_user(conn, packetData)
+        if packet.packet_type == PacketType.AUTH:
+            type = packetData.get("type")
+            if type == "2fa":
+                self.validate_2fa(conn, packetData)
+            if type == "login":
+                self.login_user(conn, packetData)
+            if type == "register":
+                self.register_user(conn, packetData)
 
         if packet.packet_type == PacketType.POST:
             packetData = PacketData(packet.payload)
@@ -69,6 +73,8 @@ class ServerConn:
                 self.add_item(conn, packetData)
             if type == "delete_item":
                 self.delete_item(conn, packetData)
+            if type == "2fa":
+                self.add_2fa_token(packetData)
 
         if packet.packet_type == PacketType.GET:
             type = packetData.get("type")
@@ -77,6 +83,23 @@ class ServerConn:
                 self.send_user_data(conn, packetData)
             if type == "key_salt":
                 self.send_key_salt(conn, packetData)
+
+    def validate_2fa(self, conn: socket, packet: PacketData):
+        code = packet.get("code")
+        username = packet.get("username")
+
+        user = self.users_db.find_one({"username": username})
+        if user:
+            if verify_otp(user['2fa'], code):
+                self.send_session_token(conn, user["username"])
+                print("2fa validated")
+            else:
+                self.send_fail(conn, "2fa")
+
+        else:
+            self.send_fail(conn, "2fa")
+
+        print("2fa failed", user['2fa'])
 
     def login_user(self, conn: socket, packet: PacketData):
         username = packet.get("username")
@@ -93,7 +116,10 @@ class ServerConn:
 
         if user:
             print("Login successful")
-            self.send_session_token(conn, user["username"])
+            if user.get("2fa"):
+                self.send_success(conn, "login", "2fa")
+            else:
+                self.send_session_token(conn, user["username"])
         else:
             print("Login failed")
             self.send_fail(conn, "login")
@@ -102,6 +128,7 @@ class ServerConn:
         data = packet.packet_data
         check_username = self.users_db.find_one({"username": data["username"]})
         print(check_username)
+        print("asdfasdfasdfasdfasdfasdfasdfsdfsdf")
         if check_username is None:
             key_salt = hashing.generate_salt()
             pass_salt = hashing.generate_salt()
@@ -125,6 +152,18 @@ class ServerConn:
         packetData = PacketData(data)
         packet = Packet(PacketType.SUCCESS, bytes(packetData))
         send_packet(conn, packet)
+
+    def add_2fa_token(self, packet: PacketData):
+        session = packet.get("session")
+        user = jwt_session.verify_jwt(session, self.jwt_secret_key)
+        if user:
+            self.users_db.update_one(
+                {"username": user},
+                {"$set": {"2fa": packet.get("data")}}, upsert=True
+            )
+            print("2fa token added")
+        else:
+            print("got unauthrized request")
 
     def add_item(self, conn: socket, packet: PacketData):
         session = packet.get("session")
@@ -169,7 +208,6 @@ class ServerConn:
             print("deleted password object.", existing_password)
         print("got unauthrized request")
 
-
     def send_user_data(self, conn: socket, packet: PacketData):
         session = packet.get("session")
 
@@ -189,10 +227,8 @@ class ServerConn:
             else:
                 print("No items found")
                 self.send_fail(conn, "items")
-
-
-        print("got unauthrized request")
-
+        else:
+            print("got unauthrized request")
 
     def send_key_salt(self, conn: socket, packet: PacketData):
         session = packet.get("session")

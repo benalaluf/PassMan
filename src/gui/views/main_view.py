@@ -28,7 +28,6 @@ class MainView(View):
 
     def update_view(self, items):
         self.main_bar.user_name_text.value = f"Wellcome, {ClientConn().username}"
-        self.update()
         if items:
             print(items)
             passwords = items.get('password')
@@ -44,5 +43,7 @@ class MainView(View):
 
 
             self.vault_control.passwords_control.update()
+
+        self.update()
 
 

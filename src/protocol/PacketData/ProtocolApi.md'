@@ -1,11 +1,9 @@
-REGISTER = 1
+AUTH = 1
+type: register - login - 2fa
 mail:
 username:
 password
-
-LOGIN = 2
-username:
-password:
+2fa_code:
 
 POST
 session:

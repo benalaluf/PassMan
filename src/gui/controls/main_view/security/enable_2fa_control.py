@@ -1,6 +1,10 @@
 import flet as ft
 
+from src.connections.client_conn import ClientConn
 from src.crypto.two_fa import generate_secret_token, generate_qr_code, verify_otp
+from src.protocol.Packet.Packet import Packet, send_packet
+from src.protocol.Packet.PacketType import PacketType
+from src.protocol.PacketData.PacketData import PacketData
 
 
 class EnableTwoFA(ft.UserControl):
@@ -65,6 +69,12 @@ class EnableTwoFA(ft.UserControl):
 
     def login(self, e):
         result = verify_otp(self.secret_key, self.code_field.value)
+
+        if result:
+            print("OTP is valid")
+            conn = ClientConn()
+            conn.enable_2fa(self.secret_key)
+            e.control.page.go('/main/security')
         print(result)
 
     def build(self):
