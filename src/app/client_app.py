@@ -92,7 +92,7 @@ class App(UserControl):
         status = self.conn.register(username, password, mail)
         if status:
             self.page.go('/main/vault/passwords')
-            user_data = self.conn.get_user_data()
+            user_data = self.conn.get_user_items()
             self.main_view.update_view(user_data)
 
 
@@ -103,8 +103,8 @@ class App(UserControl):
         status = self.conn.login(username, password)
         if status:
             self.page.go('/main/vault/passwords')
-            user_data = self.conn.get_user_data()
-            self.main_view.update_view(user_data)
+            user_items = self.conn.get_user_items()
+            self.main_view.update_view(user_items)
 
 
 

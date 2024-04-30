@@ -23,7 +23,8 @@ class ClientConn(metaclass=Singleton):
         self.session_token = None
         self.key = None
         self.key_salt = None
-        self.password =None
+        self.username = None
+        self.password = None
         self.connected = False
 
     def connect_to_server(self, ip: str, port: int):
@@ -38,84 +39,118 @@ class ClientConn(metaclass=Singleton):
             exit(1)
 
     def login(self, username: str, password: str):
-        packet_data = LoginPacketData(username=username, password=password)
-        self.password = password
+        data = {
+            "username": username,
+            "password": password
+        }
+
+        packet_data = PacketData(data)
         packet = Packet(PacketType.LOGIN, bytes(packet_data))
         send_packet(self.client_socket, packet)
 
         packet = recv_packet(self.client_socket)
-        if packet.packet_type == PacketType.SESSION:
-            packet_data = SessionPacketData(bytes=packet.payload)
-            self.session_token = packet_data.get_session_id()
+        if packet.packet_type == PacketType.SUCCESS:
+            packet_data = PacketData(packet.payload)
+            self.session_token = packet_data.get("data")
             print("Login successful")
             print("jwt_token =", self.session_token)
+            self.password = password
+            self.username = username
             return True
         else:
             print("Login failed")
             return False
 
     def register(self, username: str, password: str, mail: str):
-        packet_data = RegisterPacketData(username=username, password=password, mail=mail)
+
+        data = {
+            "username": username,
+            "password": password,
+            "mail": mail
+        }
+
+        packet_data = PacketData(data)
         packet = Packet(PacketType.REGISTER, bytes(packet_data))
         send_packet(self.client_socket, packet)
 
         packet = recv_packet(self.client_socket)
-        if packet.packet_type == PacketType.SESSION:
-            packet_data = SessionPacketData(bytes=packet.payload)
-            self.session_token = packet_data.get_session_id()
-            print("Login successful")
+        if packet.packet_type == PacketType.SUCCESS:
+            print(packet.packet_type)
+            packet_data = PacketData(packet.payload)
+            print(packet_data.packet_data)
+            self.session_token = packet_data.get("data")
+            print("Register successful")
             return True
         else:
-            print("Login failed")
+            print("Register failed")
             return False
 
-    def add_pass(self, password: PasswordData):
-        packet_data = AddItemPacketData(
-            asdict(password), item_type="password", jwt_session=self.session_token
+    def add_password(self, password: PasswordData):
+        data = {
+            "session": self.session_token,
+            "type": "add_item",
+            "item_type": "password",
+            "item_data": asdict(password),
+        }
+
+        packet_data = PacketData(
+            data
         )
 
-        packet = Packet(PacketType.ADDITEM, bytes(packet_data))
+        packet = Packet(PacketType.POST, bytes(packet_data))
         send_packet(self.client_socket, packet)
-        print("Password added successfully")
+        print("sent add password")
 
     def delete_pass(self, password: PasswordData):
-        packet_data = DeleteItemPacketData(
-            asdict(password), item_type="password", jwt_session=self.session_token
+        data = {
+            "session": self.session_token,
+            "type": "delete_item",
+            "item_type": "password",
+            "item_data": asdict(password),
+        }
+
+        packet_data = PacketData(
+            data
         )
 
-        packet = Packet(PacketType.DELETEITEM, bytes(packet_data))
+        packet = Packet(PacketType.POST, bytes(packet_data))
         send_packet(self.client_socket, packet)
-        print("Password deleted successfully")
+        print("sent delete successfully")
 
-    def add_pass(self, password: PasswordData):
-        packet_data = AddItemPacketData(
-            asdict(password), item_type="password", jwt_session=self.session_token
-        )
+    def get_user_items(self):
+        data = {
+            "session": self.session_token,
+            "type": "items"
+        }
 
-        packet = Packet(PacketType.ADDITEM, bytes(packet_data))
+        packet_data = PacketData(data)
+        packet = Packet(PacketType.GET, bytes(packet_data))
         send_packet(self.client_socket, packet)
-        print("Password added successfully")
 
-    def get_user_data(self):
-        packet_data = GetUserDocPacketData(self.session_token)
-        packet = Packet(PacketType.GETUSERDOC, bytes(packet_data))
-        send_packet(self.client_socket, packet)
         packet = recv_packet(self.client_socket)
-        packet_data = PacketData(data=packet.payload)
-        return packet_data.get_data()
+        if packet.packet_type == PacketType.SUCCESS:
+            packet_data = PacketData(packet.payload)
+            print("got items")
+            return packet_data.get("data")
+            print("didnt got items")
+        return None
 
 
 if __name__ == '__main__':
-    client = ClientConn('127.0.0.1', 3333)
-    client.main()
-    client.login("ben", "12345")
+    client = ClientConn()
+    client.connect_to_server('127.0.0.1', 1233)
+    niga = client.register("ben", "12345", "asdf")
+    if niga:
+        print("login")
+    else:
+        print("failed")
 
     password = PasswordData("https://www.niga.com", "ben", "12345", "12/12/2020")
     password2 = PasswordData("https://www.github.com", "ben", "niga", "12/12/2020")
 
-    client.add_pass(password)
-    client.add_pass(password2)
+    client.add_password(password)
+    client.add_password(password2)
 
-    items = client.get_user_data()
+    items = client.get_user_items()
 
     print(items)
