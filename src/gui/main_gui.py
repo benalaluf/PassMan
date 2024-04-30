@@ -1,11 +1,6 @@
 from flet_core import UserControl, Theme
 import flet as ft
 
-from src.gui.controls.main_view.app_bar import MainBar
-from src.gui.controls.index_view.index import IndexControl
-from src.gui.controls.index_view.login_control import LoginControl
-from src.gui.controls.index_view.register_control import RegisterControl
-from src.gui.controls.main_view.vault.vault_control import VaultControl
 from src.gui.views.index_view import IndexView
 from src.gui.views.main_view import MainView
 
@@ -38,10 +33,12 @@ class App(UserControl):
             "/": self.index_view.index_control,
             "/register": self.index_view.register_control,
             "/login": self.index_view.login_control,
+            "/2fa": self.index_view.two_fa_Control,
             "/main/vault": self.main_view.vault_control,
             "/main/vault/passwords": self.main_view.vault_control.passwords_control,
             "/main/vault/cards": self.main_view.vault_control.cards_control,
             "/main/security": self.main_view.security_control,
+            "/main/security/2fa": self.main_view.security_control.enable_two_fa,
             "/main/settings": self.main_view.settings_control
         }
 
@@ -59,6 +56,7 @@ class App(UserControl):
     def login(self, e):
         username = self.index_view.login_control.username_field.value
         password = self.index_view.login_control.password_field.value
+
         self.page.go('/main/vault/passwords')
 
     def route_change(self, route):

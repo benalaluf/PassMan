@@ -3,13 +3,13 @@ import qrcode
 from PIL import Image
 
 # Function to generate a random secret key
-def generate_secret_key():
+def generate_secret_token():
     return pyotp.random_base32()
 
 # Function to generate a QR code for the secret key
 def generate_qr_code(secret_key, filename):
     totp = pyotp.totp.TOTP(secret_key)
-    uri = totp.provisioning_uri(name='YourAppName', issuer_name='YourIssuerName')
+    uri = totp.provisioning_uri(name='iBen & co', issuer_name='PassMan')
     img = qrcode.make(uri)
     img.save(filename)
 
@@ -20,10 +20,10 @@ def verify_otp(secret_key, user_otp):
 
 if __name__ == "__main__":
     # Generate a secret key
-    secret_key = generate_secret_key()
+    secret_key = generate_secret_token()
 
     # Generate a QR code for the secret key
-    qr_code_filename = "otp_qr_code.png"
+    qr_code_filename = "qr_code.png"
     generate_qr_code(secret_key, qr_code_filename)
     print("QR code generated. Scan the QR code with Google Authenticator app.")
 
