@@ -18,13 +18,7 @@ class CardDialog(ft.UserControl):
         self.save_button = ft.TextButton("save", on_click=self.save_password)
         self.save_button.visible = False
 
-        self.menu_button = ft.PopupMenuButton(
-            items=[
-                ft.PopupMenuItem(icon=ft.icons.EDIT, text="edit", on_click=self.edit_password),
-                ft.PopupMenuItem(icon=ft.icons.DELETE, text='delete'),
-            ],
-
-        )
+        self.edit_button = ft.IconButton(ft.icons.EDIT, on_click=self.edit_password)
 
         self.bank_name_label = DataItemControl('Bank Name', self.card_data.bank_name)
         self.bank_name_label.data_lable.size = 40
@@ -59,7 +53,8 @@ class CardDialog(ft.UserControl):
                         ft.Row(
                             controls=[
                                 ft.Text("CARD INFO", size=20, weight=ft.FontWeight.W_500),
-                                self.menu_button,
+                                self.edit_button,
+                                self.save_button,
                             ],
                             alignment=ft.MainAxisAlignment.SPACE_BETWEEN
                         ),
@@ -76,17 +71,6 @@ class CardDialog(ft.UserControl):
 
                             spacing=20
                         ),
-
-                        ft.Row(
-                            controls=[
-                                self.save_button
-
-                            ],
-                            alignment=ft.MainAxisAlignment.END
-                        )
-
-
-
                     ],
                 )
             ),
@@ -109,6 +93,8 @@ class CardDialog(ft.UserControl):
     def edit_password(self, e):
         self.save_button.visible = True
         self.save_button.update()
+        self.edit_button.visible = False
+        self.edit_button.update()
         self.bank_name_label.edit()
         self.card_number_label.edit()
         self.card_cvv_label.edit()
@@ -116,6 +102,8 @@ class CardDialog(ft.UserControl):
 
     def save_password(self, e):
         self.save_button.visible = False
+        self.save_button.update()
+        self.edit_button.visible = True
         self.save_button.update()
         self.bank_name_label.view()
         self.card_number_label.view()

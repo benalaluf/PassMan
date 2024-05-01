@@ -19,6 +19,12 @@ class CardView(UserControl):
 
     def init(self):
         self.card_dialog = CardDialog(self.card_data)
+
+
+        self.delete_button = ft.IconButton(ft.icons.DELETE, icon_color=ft.colors.RED)
+        self.delete_button.visible =False
+
+
         self.bank_name_label = ft.Text(
             self.card_data.bank_name,
             size=25,
@@ -46,17 +52,24 @@ class CardView(UserControl):
             content=(
                 ft.Column(
                     controls=[
-                        ft.Column(
-                            spacing=1,
+                        ft.Row(
                             controls=[
-                                ft.Text(
-                                    'BANK NAME',
-                                    size=10,
-                                    weight=ft.FontWeight.W_500,
+                                ft.Column(
+                                    spacing=1,
+                                    controls=[
+                                        ft.Text(
+                                            'BANK NAME',
+                                            size=10,
+                                            weight=ft.FontWeight.W_500,
+                                        ),
+                                        self.bank_name_label
+                                    ],
                                 ),
-                                self.bank_name_label
+                                self.delete_button
                             ],
+                            alignment=ft.MainAxisAlignment.SPACE_BETWEEN
                         ),
+
 
                         ft.Container(
                             padding=ft.padding.only(top=10, bottom=18),
@@ -102,11 +115,20 @@ class CardView(UserControl):
             border_radius=ft.border_radius.all(18),
             bgcolor=ft.colors.ON_INVERSE_SURFACE,
             ink=True,
-            on_click= self.card_dialog.open_dlg
+            on_click= self.card_dialog.open_dlg,
+            on_hover=self.show_delete_button,
 
         )
 
         self.content = self.card
+
+    def show_delete_button(self, e):
+        if e.data == "true":
+            self.delete_button.visible = True
+            self.delete_button.update()
+        else:
+            self.delete_button.visible = False
+            self.delete_button.update()
 
     def build(self):
         return self.content
