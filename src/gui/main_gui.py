@@ -23,7 +23,6 @@ class App(UserControl):
 
         theme = Theme(color_scheme=ft.ColorScheme(tertiary_=ft.colors.WHITE, on_tertiary=ft.colors.BLACK),)
         theme.color_scheme.primary = ft.colors.BLUE
-        theme.color_scheme.secondary
         theme.page_transitions.linux = ft.PageTransitionTheme.CUPERTINO
         self.page.theme = theme
 

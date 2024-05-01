@@ -82,9 +82,11 @@ class App(UserControl):
                     self.page.views.append(self.main_view)
 
                 if route.route.split("/")[2] == "vault":
-                    self.main_view.vault_control.body.content = self.routes[route.route]
                     self.main_view.body.content = self.main_view.vault_control
                     self.page.update()
+                    self.main_view.vault_control.body.content = self.routes[route.route]
+                    self.main_view.vault_control.body.update()
+
 
                 else:
                     self.main_view.body.content = self.routes[route.route]
@@ -144,4 +146,4 @@ class App(UserControl):
 
 if __name__ == '__main__':
     app = App()
-    app.main("127.0.0.1", 3332)
+    app.main("127.0.0.1", 9999)
