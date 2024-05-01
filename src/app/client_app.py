@@ -30,11 +30,14 @@ class App(UserControl):
         self.page.on_route_change = self.route_change
         self.page.on_view_pop = self.view_pop
 
-        theme = Theme()
-        theme.color_scheme = ft.ColorScheme(surface_tint=ft.colors.WHITE, )
-        theme.page_transitions.linux = ft.PageTransitionTheme.CUPERTINO
-        theme.color_scheme.surface_tint = ft.colors.WHITE
-        self.page.theme = theme
+        self.custom_theme = Theme()
+        self.custom_theme.color_scheme = ft.ColorScheme(tertiary=ft.colors.WHITE,
+                                                        tertiary_container=ft.colors.BLACK,
+                                                        on_tertiary=ft.colors.BLACK,
+                                                        on_tertiary_container=ft.colors.BLACK
+                                                        )
+        self.custom_theme.page_transitions.linux = ft.PageTransitionTheme.CUPERTINO
+        self.page.theme = self.custom_theme
 
         self.page.go('/')
 
@@ -56,6 +59,7 @@ class App(UserControl):
         self.index_view.register_control.login_button.on_click = self.register
         self.index_view.login_control.login_button.on_click = self.login
         self.index_view.two_fa_Control.login_button.on_click = self.two_fa
+        self.main_view.settings_control.button.on_click = self.changethememode
 
         self.page.update()
 
@@ -78,9 +82,11 @@ class App(UserControl):
                     self.page.views.append(self.main_view)
 
                 if route.route.split("/")[2] == "vault":
-                    self.main_view.vault_control.body.content = self.routes[route.route]
                     self.main_view.body.content = self.main_view.vault_control
                     self.page.update()
+                    self.main_view.vault_control.body.content = self.routes[route.route]
+                    self.main_view.vault_control.body.update()
+
 
                 else:
                     self.main_view.body.content = self.routes[route.route]
@@ -101,9 +107,6 @@ class App(UserControl):
             self.page.go('/main/vault/passwords')
             self.main_view.update_view(None)
 
-
-
-
     def login(self, e):
         username = self.index_view.login_control.username_field.value
         password = self.index_view.login_control.password_field.value
@@ -115,6 +118,11 @@ class App(UserControl):
         if status == "2fa":
             self.page.go('/2fa')
 
+    def changethememode(self, e):
+        # self.page.splash.visible = True
+        self.page.theme_mode = "dark" if self.page.theme_mode == "light" else "light"
+        self.page.update()
+
     def two_fa(self, e):
         conn = ClientConn()
         result = conn.two_fa(self.index_view.two_fa_Control.code_field.value)
@@ -125,7 +133,6 @@ class App(UserControl):
             user_items = self.conn.get_user_items()
             self.main_view.update_view(user_items)
         print(result)
-
 
     def set_data(self, key, value):
         self.data[key] = value
@@ -139,4 +146,4 @@ class App(UserControl):
 
 if __name__ == '__main__':
     app = App()
-    app.main("127.0.0.1", 3332)
+    app.main("127.0.0.1", 9999)

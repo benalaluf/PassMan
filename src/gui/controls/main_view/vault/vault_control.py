@@ -18,7 +18,8 @@ class VaultControl(UserControl):
                 VaultNavigationRail(self.page),
                 self.body
 
-            ]
+            ],
+            spacing=0
         )
         self.passwords_control = PasswordControl()
         self.cards_control = CardsControl()

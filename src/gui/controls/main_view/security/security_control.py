@@ -46,7 +46,7 @@ class SecurityControl(UserControl):
                     self.password_genarator_option
                 ],
                 expand=True,
-                spacing=0,
+                spacing=5,
             ),
             padding=ft.Padding(50, 0, 50, 0),
         )

@@ -9,7 +9,6 @@ class GlobalData:
     return self._state.get(key)
   
 global_data = GlobalData()
-
 class Data:
   def __init__(self, key: str, value=None):
     self._global_state = global_data

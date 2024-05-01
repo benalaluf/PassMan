@@ -8,6 +8,7 @@ class SettingsControl(UserControl):
 
     def __init__(self):
         super().__init__()
+        self.button = ft.IconButton(ft.icons.DARK_MODE)
 
     def build(self):
 
@@ -20,7 +21,8 @@ class SettingsControl(UserControl):
                             size=50),
                     ],
                     alignment=ft.MainAxisAlignment.CENTER
-        )
+        ),
+                self.button
                 ])
         return content
 

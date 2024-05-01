@@ -19,7 +19,7 @@ class EnableTwoFA(ft.UserControl):
                                        label="Code",
                                        text_align=ft.TextAlign.CENTER,
                                        text_size=20,
-                                       color=ft.colors.BLACK, )
+                                        )
         self.qr_button.on_click = self.qr_button_clicked
         self.login_button.on_click = self.login
         self.qr_code.visible = False
@@ -38,7 +38,7 @@ class EnableTwoFA(ft.UserControl):
             height=400,
             horizontal_alignment=ft.CrossAxisAlignment.CENTER),
             border_radius=14,
-            bgcolor=ft.colors.WHITE,
+            bgcolor=ft.colors.BACKGROUND,
             padding=20,
             border=ft.border.all(color=ft.colors.BLACK, width=2),
         )

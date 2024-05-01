@@ -18,9 +18,9 @@ class PasswordContainer(UserControl):
         self.init()
 
     def init(self):
-        self.copy_button = ft.IconButton(ft.icons.COPY, icon_color=ft.colors.BLUE,
+        self.copy_button = ft.IconButton(ft.icons.COPY, icon_color=ft.colors.ON_SURFACE_VARIANT,
                                          on_click=lambda e: self.page.set_clipboard(self.password_data.password))
-        self.edit_button = ft.IconButton(ft.icons.EDIT, icon_color=ft.colors.BLUE)
+        self.edit_button = ft.IconButton(ft.icons.EDIT, icon_color=ft.colors.ON_SURFACE_VARIANT)
 
         self.delete_button = ft.IconButton(ft.icons.DELETE, icon_color=ft.colors.RED)
         self.delete_button.on_click = self.remove_password_clicked
@@ -30,56 +30,60 @@ class PasswordContainer(UserControl):
 
         self.view_dialog = PasswordDataDialog(self.password_data)
 
-        self.url_label = ft.Text(self.password_data.url, size=20,weight=ft.FontWeight.BOLD)
+        self.url_label = ft.Text(self.password_data.url, size=20, weight=ft.FontWeight.BOLD)
         self.username_label = ft.Text(self.password_data.username, size=15)
 
-        self.content = ft.Container(
-            content=ft.Row(
-                [
-                    ft.Row([
-                        ft.Container(
-                            ft.Icon(
-                                ft.icons.LOCK,
-                                color=ft.colors.BLUE
+        self.content = ft.Card(
+            ft.Container(
+                content=ft.Row(
+                    [
+                        ft.Row([
+                            ft.Container(
+                                ft.Icon(
+                                    ft.icons.LOCK,
+                                    color=ft.colors.BLUE
+                                ),
+                                padding=ft.Padding(0, 0, 10, 0)
                             ),
-                            padding=ft.Padding(0, 0, 10, 0)
-                        ),
+                            ft.Container(
+                                ft.Column([
+                                    self.url_label,
+                                    self.username_label
+                                ],
+                                    spacing=5,
+                                    alignment=ft.MainAxisAlignment.CENTER)
+                            )
+                        ]),
                         ft.Container(
-                            ft.Column([
-                                self.url_label,
-                                self.username_label
+                            ft.Row(controls=[
+                                self.delete_button,
+                                self.edit_button,
+                                self.copy_button,
+
                             ],
-                                spacing=5,
-                                alignment=ft.MainAxisAlignment.CENTER)
+                                spacing=3,
+                                alignment=ft.MainAxisAlignment.CENTER
+                            )
                         )
-                    ]),
-                    ft.Container(
-                        ft.Row(controls=[
-                            self.delete_button,
-                            self.edit_button,
-                            self.copy_button,
+                    ],
+                    alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                )
+                ,
 
-                        ],
-                            spacing=3,
-                            alignment=ft.MainAxisAlignment.CENTER
-                        )
-                    )
-                ],
-                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-            )
-            ,
+                alignment=ft.alignment.center,
+                height=80,
+                border_radius=10,
+                ink=True,
+                on_click=self.view_dialog.open_dlg,
+                bgcolor=ft.colors.ON_INVERSE_SURFACE,
 
-            alignment=ft.alignment.center,
-            height=80,
-            border_radius=10,
-            ink=True,
-            on_click=self.view_dialog.open_dlg,
-            bgcolor=ft.colors.GREY_200, padding=ft.Padding(20, 0, 10, 0)
+                padding=ft.Padding(20, 0, 10, 0)
 
+            ),
+            elevation=5
         )
 
     def save_edit_password(self, password_data: PasswordData):
-        print("edited passwoerd niggerniggernib")
         self.password_data = password_data
         self.view_dialog.edit_password(password_data)
         self.edit_password_view()
@@ -92,7 +96,7 @@ class PasswordContainer(UserControl):
         self.username_label.value = self.password_data.username
 
     def remove_password_clicked(self, e):
-        self.remove_password(self,self.password_data)
+        self.remove_password(self, self.password_data)
 
     def build(self):
         return self.content

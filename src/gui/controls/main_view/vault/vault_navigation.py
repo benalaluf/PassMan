@@ -64,20 +64,9 @@ class VaultNavigationRail(UserControl):
                     ),
 
                 ],
-                width=130, alignment=ft.MainAxisAlignment.START, spacing=10), margin= 10)
+                width=130, alignment=ft.MainAxisAlignment.START, spacing=10), )
 
         self.content = ft.Row([self.rail, ft.VerticalDivider(width=1)], spacing=0)
 
     def build(self):
         return self.content
-
-    def route(self, e):
-        if e.control.selected_index == 0:
-            self.page.go('/main/vault/passwords')
-        elif e.control.selected_index == 1:
-            self.page.go('/main/security')
-        elif e.control.selected_index == 2:
-            self.page.go('/main/settings')
-        else:
-            print("Invalid destination")
-        self.page.update()

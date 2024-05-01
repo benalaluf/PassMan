@@ -24,9 +24,9 @@ def password_strength(password):
     total_score = length_score + uppercase_score + lowercase_score + digit_score + special_score
 
     # Determine strength rating based on total score
-    if total_score >= 4:
+    if total_score >= 3:
         rating = "Strong"
-    elif total_score >= 3:
+    elif total_score >= 2:
         rating = "Medium"
     else:
         rating = "Weak"
