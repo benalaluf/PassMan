@@ -125,7 +125,7 @@ class CardDialog(ft.UserControl):
         self.save_button.visible = False
         self.save_button.update()
         self.edit_button.visible = True
-        self.edit_card.update()
+        self.edit_button.update()
         self.bank_name_label.view()
         self.card_number_label.view()
         self.card_cvv_label.view()
@@ -137,3 +137,4 @@ class CardDialog(ft.UserControl):
 
     def build(self):
         return self.content
+

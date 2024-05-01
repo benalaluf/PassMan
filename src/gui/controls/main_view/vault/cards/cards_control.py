@@ -12,6 +12,7 @@ class CardsControl(UserControl):
 
     def __init__(self):
         super().__init__()
+        self.expand = True
         self.content = None
         self.init()
 
@@ -21,6 +22,7 @@ class CardsControl(UserControl):
         self.add_button.button.on_click = self.card_form.open_dlg
 
         self.cards = ft.GridView(
+            expand=1,
             runs_count=3,
             child_aspect_ratio=1.67,
             width=970,
@@ -28,27 +30,29 @@ class CardsControl(UserControl):
 
         )
 
-        self.cards.scroll = ft.ScrollMode.ALWAYS
+
 
         self.cards_container = ft.Container(
             self.cards,
             alignment=ft.alignment.center,
+            expand=True,
         )
 
         self.view = ft.Container(
             ft.Column(controls=[
                 ft.Row(controls=[
-                    ft.Text("Cards: " , size=20),
+                    ft.Text("Cards: ", size=20),
                     self.add_button,
-                ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=900),
+                    ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, width=900),
                 self.cards
-            ], horizontal_alignment=ft.CrossAxisAlignment.CENTER)
-            , padding=ft.Padding(10, 10, 10, 10), expand=True
+            ], horizontal_alignment=ft.CrossAxisAlignment.CENTER),padding=ft.padding.all(10)
+
         )
 
     def append_card(self, card: CardData):
         card_view = CardView(card, self.remove_card, self.edit_card)
         self.cards.controls.append(card_view)
+
     def add_card(self, card: CardData):
         card_view = CardView(card, self.remove_card, self.edit_card)
         ClientConn().add_card(card)
@@ -65,5 +69,5 @@ class CardsControl(UserControl):
         self.update()
 
     def build(self):
-        print("nigger the nigger")
         return self.view
+
