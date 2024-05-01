@@ -30,11 +30,10 @@ class CardView(UserControl):
             size=20,
             weight=ft.FontWeight.BOLD
         )
-        self.img = ft.Image(
-            src=f"https://img.icons8.com/color/1200/000000/mastercard-logo.png",
-            width=80,
-            height=80,
-            fit=ft.ImageFit.CONTAIN
+        self.img = ft.Icon(
+            ft.icons.CREDIT_CARD,
+            size=60,
+            color=ft.colors.OUTLINE_VARIANT
         )
 
         self.CardTest = ft.Card(
@@ -52,7 +51,6 @@ class CardView(UserControl):
                                                 alignment=ft.alignment.bottom_left,
                                                 content=ft.Text(
                                                     'BANK NAME',
-                                                    color='gray',
                                                     size=9,
                                                     weight=ft.FontWeight.W_500,
                                                 ),
@@ -61,7 +59,6 @@ class CardView(UserControl):
                                                 alignment=ft.alignment.top_left,
                                                 content=ft.Text(
                                                     self.card_data.bank_name,
-                                                    color='#e2e8f0',
                                                     size=20,
                                                     weight=ft.FontWeight.W_500,
                                                 ),
@@ -87,7 +84,6 @@ class CardView(UserControl):
                                                 alignment=ft.alignment.bottom_left,
                                                 content=ft.Text(
                                                     'CARD NUMBER',
-                                                    color='gray',
                                                     size=9,
                                                     weight=ft.FontWeight.W_500,
                                                 ),
@@ -96,7 +92,6 @@ class CardView(UserControl):
                                                 alignment=ft.alignment.top_left,
                                                 content=ft.Text(
                                                     f'**** **** **** {self.card_data.card_number[-4:]}',
-                                                    color='#e2e8f0',
                                                     size=15,
                                                     weight=ft.FontWeight.W_700,
                                                 ),
@@ -111,7 +106,6 @@ class CardView(UserControl):
                                                 alignment=ft.alignment.bottom_left,
                                                 content=ft.Text(
                                                     'CVV NUMBER',
-                                                    color='gray',
                                                     size=9,
                                                     weight=ft.FontWeight.W_500,
                                                 ),
@@ -120,7 +114,6 @@ class CardView(UserControl):
                                                 alignment=ft.alignment.top_left,
                                                 content=ft.Text(
                                                     f'**{self.card_data.cvv[-1:]}',
-                                                    color='#e2e8f0',
                                                     size=13,
                                                     weight=ft.FontWeight.W_700,
                                                 ),
@@ -142,7 +135,11 @@ class CardView(UserControl):
                 width=310,
                 height=185,
                 border_radius=ft.border_radius.all(18),
+                bgcolor=ft.colors.ON_INVERSE_SURFACE,
+
             ),
+
+            elevation=5
         )
 
         self.content = self.CardTest

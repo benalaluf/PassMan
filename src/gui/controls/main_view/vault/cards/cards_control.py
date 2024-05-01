@@ -35,7 +35,6 @@ class CardsControl(UserControl):
         self.cards_container = ft.Container(
             self.cards,
             alignment=ft.alignment.center,
-            bgcolor=ft.colors.BLUE,
         )
 
         self.add_button = ft.ElevatedButton("Add", ft.icons.ADD, color=ft.colors.RED)

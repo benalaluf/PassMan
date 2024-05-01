@@ -58,8 +58,5 @@ class PasswordControl(UserControl):
         ClientConn().add_password(password)
         self.update()
 
-    def _before_build_command(self):
-        self.add_button = ft.ElevatedButton("asdf")
     def build(self):
-        print("nigger the nigger")
         return self.view

@@ -24,7 +24,7 @@ class SecurityContainer(ft.Container):
                             alignment=ft.MainAxisAlignment.CENTER)
                     )
                 ]),
-            ft.Icon(ft.icons.CHEVRON_RIGHT, color=ft.colors.GREY_800, size=50)
+            ft.Icon(ft.icons.CHEVRON_RIGHT, color=ft.colors.ON_SURFACE_VARIANT, size=50)
         ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             alignment=ft.alignment.center,
             height=80,
