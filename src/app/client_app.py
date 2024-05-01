@@ -37,6 +37,8 @@ class App(UserControl):
                                                         on_tertiary_container=ft.colors.BLACK
                                                         )
         self.custom_theme.page_transitions.linux = ft.PageTransitionTheme.CUPERTINO
+        self.custom_theme.dialog_theme = ft.DialogTheme(bgcolor=ft.colors.BACKGROUND,
+                                                        surface_tint_color=ft.colors.BACKGROUND)
         self.page.theme = self.custom_theme
 
         self.page.go('/')
