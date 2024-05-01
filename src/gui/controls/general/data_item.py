@@ -16,8 +16,9 @@ class DataItemControl(ft.UserControl):
 
         self.data_row_lable = ft.Row(controls=[
             self.data_lable,
-            ft.IconButton(ft.icons.COPY, icon_size=20, icon_color=ft.colors.BLUE, on_click=lambda _:self.page.set_clipboard(self.data))
-            ]
+            ft.IconButton(ft.icons.COPY, icon_size=20, icon_color=ft.colors.BLUE,
+                          on_click=lambda _: self.page.set_clipboard(self.data))
+        ]
         )
         self.data_field = ft.TextField(value=self.data, text_size=20,
                                        border=ft.InputBorder.UNDERLINE)
@@ -34,12 +35,22 @@ class DataItemControl(ft.UserControl):
     def build(self):
         return self.content
 
+    def set_data(self, data):
+        self.data_lable.value = data
+        self.data_field.value = data
+        self.update()
+
+    def get_data(self):
+        return self.data_field.value
+
     def edit(self):
         self.data_row_lable.visible = False
         self.data_field.visible = True
-        self.update()
+        self.data_field.update()
+        self.data_row_lable.update()
 
     def view(self):
         self.data_row_lable.visible = True
         self.data_field.visible = False
-        self.update()
+        self.data_field.update()
+        self.data_row_lable.update()

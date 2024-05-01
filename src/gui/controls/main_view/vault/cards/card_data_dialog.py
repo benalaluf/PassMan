@@ -7,18 +7,19 @@ from src.gui.controls.general.data_item import DataItemControl
 
 class CardDialog(ft.UserControl):
 
-    def __init__(self, card_data: CardData):
+    def __init__(self, card_data: CardData, edit_card=None):
         super().__init__()
         self.card_data = card_data
+        self.edit_card = edit_card
         self.content = None
         self.init()
 
     def init(self):
 
-        self.save_button = ft.TextButton("save", on_click=self.save_password)
+        self.save_button = ft.TextButton("save", on_click=self.save_card)
         self.save_button.visible = False
 
-        self.edit_button = ft.IconButton(ft.icons.EDIT, on_click=self.edit_password)
+        self.edit_button = ft.IconButton(ft.icons.EDIT, on_click=self.edit_card_clicked)
 
         self.bank_name_label = DataItemControl('Bank Name', self.card_data.bank_name)
         self.bank_name_label.data_lable.size = 40
@@ -90,7 +91,27 @@ class CardDialog(ft.UserControl):
         self.dialog.open = True
         e.control.page.update()
 
-    def edit_password(self, e):
+    def close_dlg(self):
+        self.dialog.open = False
+
+    def get_card_data(self):
+        card_data = CardData(
+            self.bank_name_label.get_data(),
+            self.card_number_label.get_data(),
+            self.card_cvv_label.get_data(),
+            self.expr_date_label.get_data()
+        )
+
+        card_data.id = self.card_data.id
+        return card_data
+
+
+    def set_card_data(self, card_data: CardData):
+        self.bank_name_label.set_data(card_data.bank_name)
+        self.card_number_label.set_data(card_data.card_number)
+        self.card_cvv_label.set_data(card_data.cvv)
+        self.expr_date_label.set_data(card_data.expr_date)
+    def edit_card_clicked(self, e):
         self.save_button.visible = True
         self.save_button.update()
         self.edit_button.visible = False
@@ -100,15 +121,19 @@ class CardDialog(ft.UserControl):
         self.card_cvv_label.edit()
         self.expr_date_label.edit()
 
-    def save_password(self, e):
+    def save_card(self, e):
         self.save_button.visible = False
         self.save_button.update()
         self.edit_button.visible = True
-        self.save_button.update()
+        self.edit_card.update()
         self.bank_name_label.view()
         self.card_number_label.view()
         self.card_cvv_label.view()
         self.expr_date_label.view()
+        self.edit_card(self.get_card_data())
+        self.set_card_data(self.get_card_data())
+
+
 
     def build(self):
         return self.content

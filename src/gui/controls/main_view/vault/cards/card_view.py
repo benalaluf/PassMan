@@ -11,17 +11,20 @@ from src.gui.controls.main_view.vault.passwords.password_form_dialog import Pass
 
 
 class CardView(UserControl):
-    def __init__(self, card_data: CardData):
+    def __init__(self, card_data: CardData, remove_card,edit_card, ):
         super().__init__()
+        self.edit_card = edit_card
+        self.remove_card = remove_card
         self.card_data = card_data
 
         self.init()
 
     def init(self):
-        self.card_dialog = CardDialog(self.card_data)
+        self.card_dialog = CardDialog(self.card_data, edit_card=self.edit_card_view)
 
 
         self.delete_button = ft.IconButton(ft.icons.DELETE, icon_color=ft.colors.RED)
+        self.delete_button.on_click = self.delete_button_clicked
         self.delete_button.visible =False
 
 
@@ -122,6 +125,22 @@ class CardView(UserControl):
 
         self.content = self.card
 
+    def delete_button_clicked(self, e):
+        self.remove_card(self,self.card_data)
+
+    def save_button_clicked(self, card_data):
+        self.card_data = card_data
+        self.card_dialog.edit_card(card_data)
+        self.edit_card(card_data)
+        self.update()
+        self.card_dialog.close_dlg()
+
+    def edit_card_view(self, card: CardData):
+        self.bank_name_label.value = card.bank_name
+        self.card_number_label.value = "**** **** **** " + card.card_number[-4:]
+        self.card_cvv_label.value = "**" + card.cvv[-1]
+        self.update()
+        self.edit_card(card)
     def show_delete_button(self, e):
         if e.data == "true":
             self.delete_button.visible = True

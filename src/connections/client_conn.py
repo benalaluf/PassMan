@@ -9,6 +9,7 @@ from cryptography.fernet import Fernet
 
 from src.crypto.aes import aes_encrypt, aes_decrypt
 from src.crypto.pbkdf import generate_key_from_password
+from src.data.items.card import CardData
 from src.data.items.password import PasswordData
 from src.misc.singletone import Singleton
 from src.protocol.Packet.Packet import Packet, recv_packet, send_packet
@@ -149,12 +150,47 @@ class ClientConn(metaclass=Singleton):
         send_packet(self.client_socket, packet)
         print("sent add password")
 
+    def add_card(self, card: CardData):
+        item_data = asdict(card)
+        self.encrypt_item(item_data)
+
+        data = {
+            "session": self.session_token,
+            "type": "add_item",
+            "item_type": "card",
+            "item_data": item_data,
+        }
+
+        packet_data = PacketData(
+            data
+        )
+
+        packet = Packet(PacketType.POST, bytes(packet_data))
+        send_packet(self.client_socket, packet)
+        print("sent add card")
+
     def delete_pass(self, password: PasswordData):
         data = {
             "session": self.session_token,
             "type": "delete_item",
             "item_type": "password",
             "item_data": asdict(password),
+        }
+
+        packet_data = PacketData(
+            data
+        )
+
+        packet = Packet(PacketType.POST, bytes(packet_data))
+        send_packet(self.client_socket, packet)
+        print("sent delete successfully")
+
+    def delete_card(self, card: CardData):
+        data = {
+            "session": self.session_token,
+            "type": "delete_item",
+            "item_type": "card",
+            "item_data": asdict(card),
         }
 
         packet_data = PacketData(
