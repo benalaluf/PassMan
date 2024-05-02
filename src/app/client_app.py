@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import flet as ft
 
 from flet_core import UserControl, Theme
@@ -21,7 +23,7 @@ class App(UserControl):
 
     def main(self, ip, port):
         self.init_conn(ip, port)
-        ft.app(target=self.init_gui)
+        ft.app(target=self.init_gui, assets_dir=str(Path(__file__).resolve().parent/"assets"))
 
     def init_gui(self, page: ft.Page):
         self.page = page
@@ -127,9 +129,8 @@ class App(UserControl):
             self.main_view.update_view(user_items)
         if status == "2fa":
             self.page.go('/2fa')
-        if status== "Fail":
+        if status == "Fail":
             self.index_view.login_control.failed_login()
-
 
     def changethememode(self, e):
         # self.page.splash.visible = True
