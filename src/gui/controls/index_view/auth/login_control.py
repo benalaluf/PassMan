@@ -1,13 +1,15 @@
 import flet as ft
 from flet_core import UserControl
 
+from src.connections.client_conn import ClientConn
+
 
 class LoginControl(UserControl):
     def __init__(self):
         super().__init__()
         self.title = ft.Text("Login", size=40, )
         self.username_field = ft.TextField(hint_text="Username", text_size=15, )
-        self.password_field = ft.TextField(hint_text="Password",  password=True, can_reveal_password=True,text_size=15)
+        self.password_field = ft.TextField(hint_text="Password",  password=True, can_reveal_password=True,text_size=15,on_change=self.on_change)
         self.login_button = ft.ElevatedButton(text="Login", width=200)
 
         self.login = ft.Container(ft.Column(
@@ -33,6 +35,12 @@ class LoginControl(UserControl):
             bgcolor=ft.colors.GREY_700
             )
 
+    def failed_login(self):
+        self.password_field.error_text = "login failed"
+        self.password_field.update()
+    def on_change(self, e):
+        self.password_field.error_text = ""
+        self.password_field.update()
 
     def build(self):
         return self.content

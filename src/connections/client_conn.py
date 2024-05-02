@@ -74,7 +74,6 @@ class ClientConn(metaclass=Singleton):
                 self.username = username
                 return "2fa"
 
-
         else:
             print("Login failed")
             return "Fail"

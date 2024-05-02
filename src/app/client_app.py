@@ -108,6 +108,8 @@ class App(UserControl):
         if status:
             self.page.go('/main/vault/passwords')
             self.main_view.update_view(None)
+        else:
+            self.index_view.register_control.failed_login()
 
     def login(self, e):
         username = self.index_view.login_control.username_field.value
@@ -119,6 +121,9 @@ class App(UserControl):
             self.main_view.update_view(user_items)
         if status == "2fa":
             self.page.go('/2fa')
+        if status== "Fail":
+            self.index_view.login_control.failed_login()
+
 
     def changethememode(self, e):
         # self.page.splash.visible = True

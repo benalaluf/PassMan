@@ -49,5 +49,6 @@ class SettingsControl(UserControl):
 
     def clear_clipboard(self, e):
         self.page.set_clipboard("")
+
     def build(self):
         return self.content

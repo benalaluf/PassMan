@@ -8,7 +8,7 @@ class RegisterControl(UserControl):
         super().__init__()
         self.title = ft.Text("Register", size=40, )
         self.mail_field = ft.TextField(hint_text="Mail", text_size=15)
-        self.username_field = ft.TextField(hint_text="Username", text_size=15)
+        self.username_field = ft.TextField(hint_text="Username", text_size=15, on_change=self.on_change)
         self.password_field = ft.TextField(hint_text="Password", text_size=15, password=True, can_reveal_password=True)
         self.login_button = ft.ElevatedButton(text="Register", width=200)
 
@@ -36,6 +36,14 @@ class RegisterControl(UserControl):
             expand=True,
             bgcolor=ft.colors.GREY_700
         )
+
+    def failed_login(self):
+        self.username_field.error_text = "username allready exists"
+        self.username_field.update()
+    def on_change(self, e):
+        self.username_field.error_text = ""
+        self.username_field.update()
+
 
     def build(self):
         return self.content
