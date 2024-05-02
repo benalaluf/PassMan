@@ -3,6 +3,7 @@ import flet as ft
 from src.data.items.card import CardData
 from src.data.items.password import PasswordData
 from src.gui.controls.general.data_item import DataItemControl
+from src.gui.controls.general.date_drop_down import DateDropDown
 
 
 class CardForm(ft.UserControl):
@@ -25,8 +26,8 @@ class CardForm(ft.UserControl):
         self.card_cvv_label = ft.TextField(label="CVV Number")
         self.card_cvv_label.text_size = 26
 
-        self.expr_date_label = ft.TextField(label="Expiration Date")
-        self.expr_date_label.text_size = 26
+        self.expr_date_label = DateDropDown(20,30)
+        self.expr_date_label
 
         self.card = ft.Container(
             content=(
@@ -47,9 +48,12 @@ class CardForm(ft.UserControl):
                         ft.Row(
                             controls=[
                                 self.card_cvv_label,
-                                self.expr_date_label
+                                ft.Container(
+                                    self.expr_date_label, alignment=ft.alignment.center
+                                )
 
                             ],
+                            alignment=ft.MainAxisAlignment.SPACE_BETWEEN
 
                         ),
                     ],

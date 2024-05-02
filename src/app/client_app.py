@@ -114,7 +114,7 @@ class App(UserControl):
             self.page.go('/main/vault/passwords')
             self.main_view.update_view(None)
         else:
-            self.index_view.register_control.failed_login()
+            self.index_view.register_control.failed_register()
 
     def login(self, e):
         username = self.index_view.login_control.username_field.value

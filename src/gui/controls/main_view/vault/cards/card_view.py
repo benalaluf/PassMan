@@ -13,8 +13,8 @@ from src.misc.card_number_checker import card_type
 class CardView(UserControl):
     def __init__(self, card_data: CardData, remove_card, edit_card, ):
         super().__init__()
-        self.edit_card = edit_card
         self.remove_card = remove_card
+        self.edit_card = edit_card
         self.card_data = card_data
 
         self.init()
@@ -44,8 +44,9 @@ class CardView(UserControl):
             weight=ft.FontWeight.BOLD
         )
 
-        card_compeny = card_type(self.card_data.card_number)
-        if card_compeny == "visa":
+        card_vendor = card_type(self.card_data.card_number)
+
+        if card_vendor == "visa":
             self.img = ft.Image(
                 src=f"images/visa.png",
                 width=80,
@@ -54,7 +55,7 @@ class CardView(UserControl):
             )
             self.card_background = self.gradientGenerator("#7dd3fc", "#0c4a6e")
 
-        elif card_compeny == "mastercard":
+        elif card_vendor == "mastercard":
             self.img = ft.Image(
                 src=f"images/mastercard.png",
                 width=60,
@@ -63,7 +64,7 @@ class CardView(UserControl):
             )
             self.card_background = self.gradientGenerator("#165e4b", "#064e3b")
 
-        elif card_compeny == "amex":
+        elif card_vendor == "amex":
             self.img = ft.Image(
                 src=f"images/amex.png",
                 width=60,

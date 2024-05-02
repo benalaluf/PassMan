@@ -16,6 +16,10 @@ class CardData:
             self.id = str(uuid.uuid4())
 
 
+    def validate_date(self):
+        pass
+
+
 if __name__ == '__main__':
     s = CardData("name", "458011233332123d", "879", str(datetime.datetime.now()))
     s2 = CardData("url", "ben", "1234", str(datetime.datetime.now()))
