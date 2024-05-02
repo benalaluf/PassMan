@@ -27,6 +27,7 @@ class ClientConn(metaclass=Singleton):
 
     def __init__(self):
         self.client_socket = socket(AF_INET, SOCK_STREAM)
+        self.client_items =None
         self.session_token = None
         self.key = None
         self.key_salt = None
@@ -217,6 +218,7 @@ class ClientConn(metaclass=Singleton):
             print("got items")
             encrypted_items = packet_data.get("data")
             self.decrypt_items(encrypted_items)
+            self.client_items = encrypted_items
             return encrypted_items
             print("didnt got items")
         return None
@@ -287,4 +289,4 @@ if __name__ == '__main__':
 
     items = client.get_user_items()
 
-    p
+

@@ -32,11 +32,7 @@ class CardsControl(UserControl):
 
 
 
-        self.cards_container = ft.Container(
-            self.cards,
-            alignment=ft.alignment.center,
-            expand=True,
-        )
+
 
         self.view = ft.Container(
             ft.Column(controls=[

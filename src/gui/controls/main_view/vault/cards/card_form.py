@@ -25,7 +25,7 @@ class CardForm(ft.UserControl):
         self.card_cvv_label = ft.TextField(label="CVV Number")
         self.card_cvv_label.text_size = 26
 
-        self.expr_date_label = ft.TextField("Expiration Date")
+        self.expr_date_label = ft.TextField(label="Expiration Date")
         self.expr_date_label.text_size = 26
 
         self.card = ft.Container(
@@ -51,7 +51,6 @@ class CardForm(ft.UserControl):
 
                             ],
 
-                            spacing=20
                         ),
                     ],
                 )
@@ -67,6 +66,12 @@ class CardForm(ft.UserControl):
         self.content = self.dialog
 
     def open_dlg(self, e):
+        self.bank_name_label.value = ''
+        self.card_number_label.value = ''
+        self.card_cvv_label.value = ''
+        self.expr_date_label.value = ''
+
+
         print("open dialog")
         e.control.page.dialog = self.dialog
         self.dialog.open = True
