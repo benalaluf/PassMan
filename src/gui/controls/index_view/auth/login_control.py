@@ -8,7 +8,7 @@ class LoginControl(UserControl):
     def __init__(self):
         super().__init__()
         self.title = ft.Text("Login", size=40, )
-        self.username_field = ft.TextField(hint_text="Username", text_size=15, )
+        self.username_field = ft.TextField(hint_text="Username", text_size=15, on_change=self.on_change)
         self.password_field = ft.TextField(hint_text="Password",  password=True, can_reveal_password=True,text_size=15,on_change=self.on_change)
         self.login_button = ft.ElevatedButton(text="Login", width=200)
 
@@ -38,9 +38,15 @@ class LoginControl(UserControl):
     def failed_login(self):
         self.password_field.error_text = "login failed"
         self.password_field.update()
+
+    def invalid_login(self):
+        self.username_field.error_text = "Invalid username or password"
+        self.username_field.update()
     def on_change(self, e):
         self.password_field.error_text = ""
+        self.username_field.error_text = ""
         self.password_field.update()
+        self.username_field.update()
 
     def build(self):
         return self.content
