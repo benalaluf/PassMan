@@ -52,7 +52,7 @@ class PasswordFormDialog(ft.UserControl):
         self.dialog = ft.AlertDialog(
             title=self.title,
             content=self.password_data_container,
-            bgcolor=ft.colors.WHITE,
+            bgcolor=ft.colors.BACKGROUND,
             actions=[self.save_button]
         )
 

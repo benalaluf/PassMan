@@ -2,6 +2,7 @@ from flet_core import View, AppBar
 import flet as ft
 
 from src.connections.client_conn import ClientConn
+from src.data.items.card import CardData
 from src.data.items.password import PasswordData
 from src.gui.controls.main_view.app_bar import MainBar
 from src.gui.controls.main_view.main_nav import MainNavMenu
@@ -31,10 +32,13 @@ class MainView(View):
         if items:
             print(items)
             passwords = items.get('password')
-            cards = items.get('cards')
+            cards = items.get('card')
             if passwords:
                 for password in passwords:
-                    self.vault_control.passwords_control.add_password(PasswordData(**password))
+                    self.vault_control.passwords_control.append_password(PasswordData(**password))
+            if cards:
+                for card in cards:
+                    self.vault_control.cards_control.append_card(CardData(**card))
 
 
             if cards:

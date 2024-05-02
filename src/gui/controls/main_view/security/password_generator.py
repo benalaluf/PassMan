@@ -57,7 +57,7 @@ class PasswordGenerator(ft.UserControl):
                     spacing=100
                 ),
                 border_radius=14,
-                bgcolor=ft.colors.WHITE,
+                bgcolor=ft.colors.BACKGROUND,
                 border=ft.border.all(color=ft.colors.BLACK, width=2),
                 height=500,
                 width=500,

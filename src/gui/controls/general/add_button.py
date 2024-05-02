@@ -6,7 +6,7 @@ import flet as ft
 from src.gui.controls.main_view.vault.passwords.password_data_dialog import PasswordDataDialog
 
 
-class PasswordAddButton(UserControl):
+class AddButton(UserControl):
     def __init__(self):
         super().__init__()
         self.content = None

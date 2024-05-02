@@ -21,10 +21,9 @@ class App(UserControl):
         self.page.on_route_change = self.route_change
         self.page.on_view_pop = self.view_pop
 
-        theme = Theme()
-        theme.color_scheme = ft.ColorScheme(surface_tint=ft.colors.WHITE,)
+        theme = Theme(color_scheme=ft.ColorScheme(tertiary_=ft.colors.WHITE, on_tertiary=ft.colors.BLACK),)
+        theme.color_scheme.primary = ft.colors.BLUE
         theme.page_transitions.linux = ft.PageTransitionTheme.CUPERTINO
-        theme.color_scheme.surface_tint = ft.colors.WHITE
         self.page.theme = theme
 
         self.page.go('/')

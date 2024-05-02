@@ -136,6 +136,7 @@ class ServerConn:
             data["key_salt"] = key_salt
             pass_hash = hashing.hashpass(packet.get("password"), pass_salt)
             data["password"] = pass_hash
+            data.pop("type")
             self.users_db.insert_one(data)
             self.send_session_token(conn, data["username"])
             print("user register")

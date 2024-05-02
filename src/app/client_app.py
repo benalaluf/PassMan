@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import flet as ft
 
 from flet_core import UserControl, Theme
@@ -21,7 +23,7 @@ class App(UserControl):
 
     def main(self, ip, port):
         self.init_conn(ip, port)
-        ft.app(target=self.init_gui)
+        ft.app(target=self.init_gui, assets_dir=str(Path(__file__).resolve().parent/"assets"))
 
     def init_gui(self, page: ft.Page):
         self.page = page
@@ -30,11 +32,16 @@ class App(UserControl):
         self.page.on_route_change = self.route_change
         self.page.on_view_pop = self.view_pop
 
-        theme = Theme()
-        theme.color_scheme = ft.ColorScheme(surface_tint=ft.colors.WHITE, )
-        theme.page_transitions.linux = ft.PageTransitionTheme.CUPERTINO
-        theme.color_scheme.surface_tint = ft.colors.WHITE
-        self.page.theme = theme
+        self.custom_theme = Theme()
+        self.custom_theme.color_scheme = ft.ColorScheme(tertiary=ft.colors.WHITE,
+                                                        tertiary_container=ft.colors.BLACK,
+                                                        on_tertiary=ft.colors.BLACK,
+                                                        on_tertiary_container=ft.colors.BLACK
+                                                        )
+        self.custom_theme.page_transitions.linux = ft.PageTransitionTheme.CUPERTINO
+        self.custom_theme.dialog_theme = ft.DialogTheme(bgcolor=ft.colors.BACKGROUND,
+                                                        surface_tint_color=ft.colors.BACKGROUND)
+        self.page.theme = self.custom_theme
 
         self.page.go('/')
 
@@ -56,6 +63,7 @@ class App(UserControl):
         self.index_view.register_control.login_button.on_click = self.register
         self.index_view.login_control.login_button.on_click = self.login
         self.index_view.two_fa_Control.login_button.on_click = self.two_fa
+        self.main_view.settings_control.button.on_click = self.changethememode
 
         self.page.update()
 
@@ -78,9 +86,11 @@ class App(UserControl):
                     self.page.views.append(self.main_view)
 
                 if route.route.split("/")[2] == "vault":
-                    self.main_view.vault_control.body.content = self.routes[route.route]
                     self.main_view.body.content = self.main_view.vault_control
                     self.page.update()
+                    self.main_view.vault_control.body.content = self.routes[route.route]
+                    self.main_view.vault_control.body.update()
+
 
                 else:
                     self.main_view.body.content = self.routes[route.route]
@@ -96,17 +106,22 @@ class App(UserControl):
         mail = self.index_view.register_control.mail_field.value
         username = self.index_view.register_control.username_field.value
         password = self.index_view.register_control.password_field.value
+        if username == "" or password == "" or mail == "":
+            self.index_view.register_control.invalid_register()
+            return
         status = self.conn.register(username, password, mail)
         if status:
             self.page.go('/main/vault/passwords')
             self.main_view.update_view(None)
-
-
-
+        else:
+            self.index_view.register_control.failed_register()
 
     def login(self, e):
         username = self.index_view.login_control.username_field.value
         password = self.index_view.login_control.password_field.value
+        if username == "" or password == "":
+            self.index_view.login_control.invalid_login()
+            return
         status = self.conn.login(username, password)
         if status == "Success":
             self.page.go('/main/vault/passwords')
@@ -114,6 +129,13 @@ class App(UserControl):
             self.main_view.update_view(user_items)
         if status == "2fa":
             self.page.go('/2fa')
+        if status == "Fail":
+            self.index_view.login_control.failed_login()
+
+    def changethememode(self, e):
+        # self.page.splash.visible = True
+        self.page.theme_mode = "dark" if self.page.theme_mode == "light" else "light"
+        self.page.update()
 
     def two_fa(self, e):
         conn = ClientConn()
@@ -125,7 +147,6 @@ class App(UserControl):
             user_items = self.conn.get_user_items()
             self.main_view.update_view(user_items)
         print(result)
-
 
     def set_data(self, key, value):
         self.data[key] = value
@@ -139,4 +160,4 @@ class App(UserControl):
 
 if __name__ == '__main__':
     app = App()
-    app.main("127.0.0.1", 3332)
+    app.main("127.0.0.1", 8080)

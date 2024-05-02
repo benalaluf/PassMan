@@ -10,28 +10,28 @@ class SecurityContainer(ft.Container):
         self.sub_title_label = ft.Text(subtitle, size=15)
 
         self.content = ft.Container(content=
-            ft.Row([
-                ft.Row(
-                    [
-                        self.icon,
+        ft.Row([
+            ft.Row(
+                [
+                    self.icon,
 
-                        ft.Container(
-                            ft.Column([
-                                self.title_label,
-                                self.sub_title_label
-                            ],
-                                spacing=5,
-                                alignment=ft.MainAxisAlignment.CENTER)
-                        )
-                    ]),
-                ft.Icon(ft.icons.CHEVRON_RIGHT, color=ft.colors.GREY_800, size=50)
-            ],alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                    ft.Container(
+                        ft.Column([
+                            self.title_label,
+                            self.sub_title_label
+                        ],
+                            spacing=5,
+                            alignment=ft.MainAxisAlignment.CENTER)
+                    )
+                ]),
+            ft.Icon(ft.icons.CHEVRON_RIGHT, color=ft.colors.ON_SURFACE_VARIANT, size=50)
+        ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             alignment=ft.alignment.center,
             height=80,
             border_radius=10,
             ink=True,
+            bgcolor=ft.colors.ON_INVERSE_SURFACE,
             on_click=on_click,
-            bgcolor=ft.colors.GREY_100
 
         )
 
