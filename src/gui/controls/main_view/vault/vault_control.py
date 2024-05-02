@@ -12,6 +12,7 @@ from src.gui.controls.main_view.vault.vault_navigation import VaultNavigationRai
 class VaultControl(UserControl):
     def __init__(self):
         super().__init__()
+        self.expand= True
         self.body = ft.Container(alignment=ft.alignment.center, expand=True, padding=0)
         self.content = ft.Row(
             [

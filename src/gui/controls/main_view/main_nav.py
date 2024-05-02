@@ -8,7 +8,7 @@ class MainNavMenu(NavigationBar):
         super().__init__()
         self.page = page
         self.destinations = [
-            ft.NavigationDestination(icon=ft.icons.DATA_OBJECT, label="Vault"),
+            ft.NavigationDestination(icon=ft.icons.ACCOUNT_BALANCE_WALLET, label="Vault"),
             ft.NavigationDestination(icon=ft.icons.SHIELD, label="Security"),
             ft.NavigationDestination(
                 icon=ft.icons.SETTINGS,
