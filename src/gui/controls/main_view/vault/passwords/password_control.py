@@ -61,5 +61,22 @@ class PasswordControl(UserControl):
         ClientConn().add_password(password)
         self.update()
 
+    def before_update(self):
+        conn = ClientConn()
+        items = conn.get_user_items()
+        self.passwords.controls.clear()
+        if items:
+
+            print(items)
+            passwords = items.get('password')
+            cards = items.get('card')
+            if passwords:
+                for password in passwords:
+                    self.append_password(PasswordData(**password))
+
+
+            if cards:
+                pass
+
     def build(self):
         return self.view

@@ -1,6 +1,8 @@
 import flet as ft
 from flet_core import UserControl, AppBar
 
+from src.connections.client_conn import ClientConn
+
 
 class MainBar(AppBar):
     def __init__(self, page: ft.Page, *args, **kwargs):
@@ -8,6 +10,10 @@ class MainBar(AppBar):
         self.page = page
         self.menu_button = ft.IconButton(ft.icons.MENU, icon_color="white")
         self.init()
+
+
+    def before_update(self):
+        self.user_name_text.value = f"Wellcome, {ClientConn().username}"
 
     def init(self):
         self.title = ft.Row(

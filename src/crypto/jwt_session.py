@@ -1,7 +1,8 @@
 import secrets
 
-import jwt
 import datetime
+
+import jwt
 
 from src.protocol.Packet.Packet import Packet
 from src.protocol.Packet.PacketType import PacketType

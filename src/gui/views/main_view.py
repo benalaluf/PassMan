@@ -28,21 +28,20 @@ class MainView(View):
 
 
     def update_view(self, items):
-        self.main_bar.user_name_text.value = f"Wellcome, {ClientConn().username}"
-        if items:
-            print(items)
-            passwords = items.get('password')
-            cards = items.get('card')
-            if passwords:
-                for password in passwords:
-                    self.vault_control.passwords_control.append_password(PasswordData(**password))
-            if cards:
-                for card in cards:
-                    self.vault_control.cards_control.append_card(CardData(**card))
-
-
-            if cards:
-                pass
+        # if items:
+        #     print(items)
+        #     passwords = items.get('password')
+        #     cards = items.get('card')
+        #     if passwords:
+        #         for password in passwords:
+        #             self.vault_control.passwords_control.append_password(PasswordData(**password))
+        #     if cards:
+        #         for card in cards:
+        #             self.vault_control.cards_control.append_card(CardData(**card))
+        #
+        #
+        #     if cards:
+        #         pass
 
 
 
