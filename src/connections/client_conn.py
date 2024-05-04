@@ -34,7 +34,7 @@ class ClientConn(metaclass=Singleton):
             print(e)
             exit(1)
 
-    def login(self, username: str, password: str):
+    def login(self, username:str, password:str):
         data = AuthData(
             type="login",
             username=username,
@@ -233,17 +233,22 @@ class ClientConn(metaclass=Singleton):
 
 if __name__ == '__main__':
     client = ClientConn()
-    client.connect_to_server('127.0.0.1', 1233)
-    niga = client.register("ben", "12345", "asdf")
-    if niga:
-        print("login")
-    else:
-        print("failed")
+    client.connect_to_server('127.0.0.1', 6969)
 
-    password = PasswordData("https://www.niga.com", "ben", "12345", "12/12/2020")
-    password2 = PasswordData("https://www.github.com", "ben", "niga", "12/12/2020")
+    data = {
+        "type": "login",
+        "username":'x',
+        'password':{"$ne":"passw"}
+    }
 
-    client.add_password(password)
-    client.add_password(password2)
+    packet_data = PacketData(data)
+    packet = Packet(PacketType.AUTH, bytes(packet_data))
+    send_packet(client.client_socket, packet)
 
-    items = client.get_user_items()
+    response_packet = recv_packet(client.client_socket)
+    if response_packet.packet_type == PacketType.SUCCESS:
+        packet_data = PacketData(response_packet.payload)
+        success_type = packet_data.get("type")
+        if success_type == "auth":
+            print("Success")
+

@@ -2,6 +2,7 @@ import flet as ft
 from flet_core import UserControl
 
 from src.connections.client_conn import ClientConn
+from src.misc.input_validation import validate_mail
 
 
 class RegisterControl(UserControl):
@@ -45,14 +46,34 @@ class RegisterControl(UserControl):
         mail = self.mail_field.value
         username = self.username_field.value
         password = self.password_field.value
-        if username == "" or password == "" or mail == "":
-            self.invalid_register()
-            return
-        status = conn.register(username, password, mail)
-        if status:
-            self.page.go('/main/vault/passwords')
-        else:
-            self.failed_register()
+        is_valid_input = self.validate_input()
+        if is_valid_input:
+            status = conn.register(username, password, mail)
+            if status:
+                self.page.go('/main/vault/passwords')
+            else:
+                self.failed_register()
+
+    def validate_input(self):
+        valid = True
+        if not validate_mail(self.mail_field.value):
+            self.mail_field.error_text = "Invalid mail"
+            self.mail_field.update()
+            valid = False
+        if self.username_field.value == "":
+            self.username_field.error_text = "Username is required"
+            self.username_field.update()
+            valid = False
+        if self.password_field.value == "":
+            self.password_field.error_text = "Password is required"
+            self.password_field.update()
+            valid = False
+        if self.mail_field.value == "":
+            self.mail_field.error_text = "Mail is required"
+            self.mail_field.update()
+            valid = False
+
+        return valid
 
     def failed_register(self):
         self.username_field.error_text = "username allready exists"
