@@ -194,13 +194,9 @@ class ClientConn(metaclass=Singleton):
 
         packet_data = PacketData(asdict(data))
         packet = Packet(PacketType.GET, bytes(packet_data))
-        print("req items")
-        send_packet(self.client_socket, packet)
-
-        packet = recv_packet(self.client_socket)
-        print("got items")
-        if packet.packet_type == PacketType.SUCCESS:
-            packet_data = PacketData(packet.payload)
+        response_packet = send_and_recv_packet(self.client_socket, packet)
+        if response_packet.packet_type == PacketType.SUCCESS:
+            packet_data = PacketData(response_packet.payload)
             encrypted_items = packet_data.get("data")
             self.decrypt_items(encrypted_items)
             return encrypted_items

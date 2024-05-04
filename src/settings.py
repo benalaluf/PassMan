@@ -3,6 +3,8 @@ from flet_core import Theme
 
 THEME = Theme()
 THEME.page_transitions.linux = ft.PageTransitionTheme.CUPERTINO
+THEME.page_transitions.windows = ft.PageTransitionTheme.CUPERTINO
+THEME.page_transitions.macos = ft.PageTransitionTheme.CUPERTINO
 THEME.color_scheme = ft.ColorScheme(
     tertiary=ft.colors.WHITE,
     tertiary_container=ft.colors.BLACK,

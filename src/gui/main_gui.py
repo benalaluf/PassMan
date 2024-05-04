@@ -3,6 +3,7 @@ from pathlib import Path
 from flet_core import UserControl, Theme
 import flet as ft
 
+from src.gui.views.auth_view import AuthView
 from src.gui.views.index_view import IndexView
 from src.gui.views.main_view import MainView
 from src.settings import THEME
@@ -14,6 +15,7 @@ class ClientGUI():
         self.routes = {}
 
         self.index_view = IndexView()
+        self.auth_view = AuthView()
         self.main_view = MainView()
 
     def main(self):
@@ -31,8 +33,10 @@ class ClientGUI():
 
         self.page.go('/')
 
-        self.routes = {"/": self.index_view.index_control, "/register": self.index_view.register_control,
-                       "/login": self.index_view.login_control, "/2fa": self.index_view.two_fa_Control,
+        self.routes = {"/": self.index_view.index_control,
+                       "/auth/register": self.auth_view.register_control,
+                       "/auth/login": self.auth_view.login_control,
+                       "/auth/2fa": self.auth_view.two_fa_Control,
                        "/main/vault": self.main_view.vault_control,
                        "/main/vault/passwords": self.main_view.vault_control.passwords_control,
                        "/main/vault/cards": self.main_view.vault_control.cards_control,
@@ -46,26 +50,32 @@ class ClientGUI():
 
     def route_change(self, route):
         print(route.route)
-
-        if not route.route.startswith("/main"):
+        if route.route == "/":
             self.index_view.body.content = self.routes[route.route]
 
             if self.page.views[0] is not self.index_view:
                 self.page.views.clear()
                 self.page.views.append(self.index_view)
-        else:
-            if route.route != "/main":
-                if self.page.views[0] is not self.main_view:
-                    self.page.views.clear()
-                    self.page.views.append(self.main_view)
 
-                if route.route.split("/")[2] == "vault":
-                    self.main_view.body.content = self.main_view.vault_control
-                    self.page.update()
-                    self.main_view.vault_control.body.content = self.routes[route.route]
-                    self.main_view.vault_control.body.update()
-                else:
-                    self.main_view.body.content = self.routes[route.route]
+        elif route.route.startswith("/auth"):
+            self.auth_view.body.content = self.routes[route.route]
+
+            if self.page.views[0] is not self.auth_view:
+                self.page.views.clear()
+                self.page.views.append(self.auth_view)
+
+        elif route.route.startswith("/main"):
+            if self.page.views[0] is not self.main_view:
+                self.page.views.clear()
+                self.page.views.append(self.main_view)
+
+            if route.route.split("/")[2] == "vault":
+                self.main_view.body.content = self.main_view.vault_control
+                self.page.update()
+                self.main_view.vault_control.body.content = self.routes[route.route]
+                self.main_view.vault_control.body.update()
+            else:
+                self.main_view.body.content = self.routes[route.route]
 
         self.page.update()
 
