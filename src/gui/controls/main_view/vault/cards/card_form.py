@@ -15,6 +15,8 @@ class CardForm(ft.UserControl):
         self.init()
 
     def init(self):
+        number_input_filter = ft.InputFilter(r'[0-9]')
+
         self.save_button = ft.TextButton("save", on_click=self.add_card_clicked)
 
         self.bank_name_label = ft.TextField(label="Bank Name", on_change=text_field_on_change)
@@ -22,9 +24,11 @@ class CardForm(ft.UserControl):
 
         self.card_number_label = ft.TextField(label="Card Number", on_change=text_field_on_change)
         self.card_number_label.text_size = 40
+        self.card_number_label.input_filter = number_input_filter
 
         self.card_cvv_label = ft.TextField(label="CVV Number", on_change=text_field_on_change)
         self.card_cvv_label.text_size = 26
+        self.card_cvv_label.input_filter = number_input_filter
 
         self.expr_date_label = DateDropDown(20,30)
 

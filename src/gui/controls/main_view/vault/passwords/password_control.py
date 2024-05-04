@@ -73,8 +73,7 @@ class PasswordControl(UserControl):
             if cards:
                 pass
 
-        self.password_counter.value ="Passwords: " + str(len(self.passwords.controls))
-        print("afeter password befoire update")
+            self.password_counter.value ="Passwords: " + str(len(self.passwords.controls))
 
 
     def build(self):

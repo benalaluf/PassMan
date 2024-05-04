@@ -34,24 +34,15 @@ class Packet:
 
 
 def send_and_recv_packet(sock: socket.socket, packet: Packet):
-    print("[+] sent packet")
     send_packet(sock, packet)
-    print("[+] wait for response")
     packet = recv_packet(sock)
-    print("[+] got packet")
     return packet
 def send_packet(sock: socket.socket, packet: Packet):
-    print("[+] sent packet")
-
     sock.sendall(bytes(packet))
 
 
 def recv_packet(sock):
-    print("[+] wait for response")
-
     packet = Packet.from_bytes(__recv_raw_packet(sock))
-    print("[+] got packet")
-
     return packet
 
 
