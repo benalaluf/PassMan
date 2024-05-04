@@ -74,6 +74,8 @@ class PasswordControl(UserControl):
                 pass
 
             self.password_counter.value ="Passwords: " + str(len(self.passwords.controls))
+        else:
+            print("faild to get items")
 
 
     def build(self):

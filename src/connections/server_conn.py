@@ -211,24 +211,25 @@ class ServerConn:
         username = jwt_session.verify_jwt(session, self.jwt_secret_key)
         user = self.users_db.find_one({"username": username})
         if user:
-            if user.get("db"):
+            if user.get("items"):
                 user.pop("_id")
                 data = {
-                    "type": "db",
-                    "data": user["db"]
+                    "type": "items",
+                    "data": user["items"]
                 }
                 packetData = PacketData(data)
-
                 packet = Packet(PacketType.SUCCESS, bytes(packetData))
                 send_packet(conn, packet)
                 print("sent items")
+                print(data)
             else:
-                print("No db found")
-                self.send_fail(conn, "db")
+                print("no items found")
+                self.send_fail(conn, "items")
+
         else:
             print("got unauthrized request")
 
-            self.send_fail(conn, "db")
+            self.send_fail(conn, "items")
 
     def send_fail(self, conn: socket, fail_type: str):
         data = {

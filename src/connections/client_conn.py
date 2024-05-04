@@ -198,6 +198,7 @@ class ClientConn(metaclass=Singleton):
         if response_packet.packet_type == PacketType.SUCCESS:
             packet_data = PacketData(response_packet.payload)
             encrypted_items = packet_data.get("data")
+            print(encrypted_items)
             self.decrypt_items(encrypted_items)
             print("[+] got items")
             return encrypted_items

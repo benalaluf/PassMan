@@ -90,7 +90,10 @@ class RegisterControl(UserControl):
         self.username_field.update()
         self.password_field.update()
         self.mail_field.update()
-
+    def before_update(self):
+        self.mail_field.value = ""
+        self.username_field.value = ""
+        self.password_field.value = ""
     def build(self):
         return self.content
 
