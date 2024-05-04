@@ -20,8 +20,14 @@ class DataItemControl(ft.UserControl):
                           on_click=lambda _: self.page.set_clipboard(self.data))
         ]
         )
-        self.data_field = ft.TextField(value=self.data, text_size=20,
-                                       border=ft.InputBorder.UNDERLINE, dense=True, content_padding=0)
+        self.data_field = ft.TextField(
+            value=self.data,
+            text_size=20,
+            border=ft.InputBorder.UNDERLINE,
+            dense=True,
+            content_padding=0,
+            on_change=text_field_on_change
+        )
         self.data_field.visible = False
 
         self.content = ft.Container(
@@ -55,3 +61,6 @@ class DataItemControl(ft.UserControl):
         self.data_field.visible = False
         self.data_field.update()
         self.data_row_lable.update()
+def text_field_on_change(e):
+    e.control.error_text = ""
+    e.control.update()

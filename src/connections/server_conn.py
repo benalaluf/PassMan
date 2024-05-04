@@ -171,18 +171,18 @@ class ServerConn:
         if user:
             print(item_data)
 
-            existing_password = self.users_db.find_one({"username": user, f"db.{item_type}.id": item_data["id"]})
+            existing_password = self.users_db.find_one({"username": user, f"items.{item_type}.id": item_data["id"]})
 
             if existing_password:
                 self.users_db.update_one(
-                    {"username": user, f"db.{item_type}.id": item_data["id"]},
-                    {"$set": {f"db.{item_type}.$": item_data}}
+                    {"username": user, f"items.{item_type}.id": item_data["id"]},
+                    {"$set": {f"items.{item_type}.$": item_data}}
                 )
                 print("Password object updated.")
             else:
                 self.users_db.update_one(
                     {"username": user},
-                    {"$push": {f"db.{item_type}": item_data}},
+                    {"$push": {f"items.{item_type}": item_data}},
                     upsert=True
                 )
                 print("New password object added.")
@@ -209,6 +209,7 @@ class ServerConn:
         session = packet.get("session")
 
         username = jwt_session.verify_jwt(session, self.jwt_secret_key)
+        print("jwt user", username)
         user = self.users_db.find_one({"username": username})
         if user:
             if user.get("items"):
