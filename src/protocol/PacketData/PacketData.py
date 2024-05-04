@@ -7,13 +7,13 @@ class PacketData:
         super().__init__()
 
         if isinstance(data, bytes):
-            self.packet_data = json.loads(data.decode())
+            self.packet_data = json.loads(data.decode('utf-8'))
         else:
             self.packet_data = data
 
     def __bytes__(self):
         json_str = json.dumps(self.packet_data)
-        return json_str.encode()
+        return json_str.encode('utf-8')
 
     def get(self, key):
         try:

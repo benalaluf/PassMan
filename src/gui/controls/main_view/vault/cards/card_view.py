@@ -48,7 +48,7 @@ class CardView(UserControl):
 
         if card_vendor == "visa":
             self.img = ft.Image(
-                src=f"images/visa.png",
+                src=f"icons/visa.png",
                 width=80,
                 height=80,
                 fit='contain',
@@ -57,7 +57,7 @@ class CardView(UserControl):
 
         elif card_vendor == "mastercard":
             self.img = ft.Image(
-                src=f"images/mastercard.png",
+                src=f"icons/mastercard.png",
                 width=60,
                 height=60,
                 fit='contain'
@@ -66,7 +66,7 @@ class CardView(UserControl):
 
         elif card_vendor == "amex":
             self.img = ft.Image(
-                src=f"images/amex.png",
+                src=f"icons/amex.png",
                 width=60,
                 height=60,
                 fit='contain'

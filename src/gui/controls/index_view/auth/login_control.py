@@ -9,8 +9,11 @@ class LoginControl(UserControl):
         super().__init__()
         self.title = ft.Text("Login", size=40, )
         self.username_field = ft.TextField(hint_text="Username", text_size=15, on_change=self.on_change)
-        self.password_field = ft.TextField(hint_text="Password",  password=True, can_reveal_password=True,text_size=15,on_change=self.on_change)
+        self.password_field = ft.TextField(hint_text="Password", password=True, can_reveal_password=True, text_size=15,
+                                           on_change=self.on_change)
+
         self.login_button = ft.ElevatedButton(text="Login", width=200)
+        self.login_button.on_click = self.login
 
         self.login = ft.Container(ft.Column(
             [
@@ -33,7 +36,23 @@ class LoginControl(UserControl):
             alignment=ft.alignment.center,
             expand=True,
             bgcolor=ft.colors.GREY_700
-            )
+        )
+
+    def login(self, e):
+        conn = ClientConn()
+        username = self.username_field.value
+        password = self.password_field.value
+        if username == "" or password == "":
+            self.invalid_login()
+            return
+        status = conn.login(username, password)
+        if status == "Success":
+            self.page.go('/main/vault/passwords')
+            user_items = conn.get_user_items()
+        if status == "2fa":
+            self.page.go('/2fa')
+        if status == "Fail":
+            self.failed_login()
 
     def failed_login(self):
         self.password_field.error_text = "login failed"
@@ -42,6 +61,7 @@ class LoginControl(UserControl):
     def invalid_login(self):
         self.username_field.error_text = "Invalid username or password"
         self.username_field.update()
+
     def on_change(self, e):
         self.password_field.error_text = ""
         self.username_field.error_text = ""

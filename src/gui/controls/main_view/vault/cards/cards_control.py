@@ -30,10 +30,6 @@ class CardsControl(UserControl):
 
         )
 
-
-
-
-
         self.view = ft.Container(
             ft.Column(controls=[
                 ft.Row(controls=[
@@ -50,19 +46,24 @@ class CardsControl(UserControl):
         self.cards.controls.append(card_view)
 
     def add_card(self, card: CardData):
-        card_view = CardView(card, self.remove_card, self.edit_card)
         ClientConn().add_card(card)
-        self.cards.controls.append(card_view)
         self.update()
 
     def remove_card(self, card_view, card_data):
-        self.cards.controls.remove(card_view)
         ClientConn().delete_card(card_data)
         self.update()
 
     def edit_card(self, card: CardData):
         ClientConn().add_card(card)
         self.update()
+
+    def before_update(self):
+        self.cards.controls.clear()
+        print("update cards")
+        items = ClientConn().get_user_items()
+        if items.get("card"):
+            for card in items["card"]:
+                self.append_card(CardData(**card))
 
     def build(self):
         return self.view
