@@ -45,16 +45,11 @@ class PasswordControl(UserControl):
         self.passwords.controls.append(password_container)
         self.password_counter.value ="Passwords: " + str(len(self.passwords.controls))
     def add_password(self, password: PasswordData):
-        password_container = PasswordContainer(password, self.remove_password, self.edit_password)
         ClientConn().add_password(password)
-        self.passwords.controls.append(password_container)
-        self.password_counter.value ="Passwords: " + str(len(self.passwords.controls))
         self.update()
 
-    def remove_password(self, password_container, password_data):
-        self.passwords.controls.remove(password_container)
+    def remove_password(self, password_data):
         ClientConn().delete_pass(password_data)
-        self.password_counter.value ="Passwords: " + str(len(self.passwords.controls))
         self.update()
 
     def edit_password(self, password:PasswordData):
@@ -77,6 +72,9 @@ class PasswordControl(UserControl):
 
             if cards:
                 pass
+
+        self.password_counter.value ="Passwords: " + str(len(self.passwords.controls))
+
 
     def build(self):
         return self.view

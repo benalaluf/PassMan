@@ -28,6 +28,7 @@ class MainView(View):
 
 
     def update_view(self, items):
+        pass
         # if items:
         #     print(items)
         #     passwords = items.get('password')
@@ -45,7 +46,6 @@ class MainView(View):
 
 
 
-            self.vault_control.passwords_control.update()
 
 
 
