@@ -4,9 +4,8 @@ import datetime
 
 import jwt
 
-from src.protocol.Packet.Packet import Packet
-from src.protocol.Packet.PacketType import PacketType
-from src.protocol.PacketData.SessionPacketData import SessionPacketData
+from src.protocol.Packet import Packet
+from src.protocol.PacketType import PacketType
 
 
 def generate_jwt(username, secret_key):

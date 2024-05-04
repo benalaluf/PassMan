@@ -1,6 +1,6 @@
 import flet as ft
 
-from src.data.items.password import PasswordData
+from src.data.db.password import PasswordData
 
 
 class PasswordDataDialog(ft.UserControl):

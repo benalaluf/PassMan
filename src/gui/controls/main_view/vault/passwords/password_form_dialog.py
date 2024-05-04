@@ -3,7 +3,7 @@ from datetime import datetime
 import flet as ft
 
 from src.connections.client_conn import ClientConn
-from src.data.items.password import PasswordData
+from src.data.db.password import PasswordData
 
 
 class PasswordFormDialog(ft.UserControl):

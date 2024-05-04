@@ -1,7 +1,7 @@
 import flet as ft
 
-from src.data.items.card import CardData
-from src.data.items.password import PasswordData
+from src.data.db.card import CardData
+from src.data.db.password import PasswordData
 from src.gui.controls.general.data_item import DataItemControl
 from src.gui.controls.general.date_drop_down import DateDropDown
 

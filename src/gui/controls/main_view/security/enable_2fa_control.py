@@ -2,9 +2,6 @@ import flet as ft
 
 from src.connections.client_conn import ClientConn
 from src.crypto.two_fa import generate_secret_token, generate_qr_code, verify_otp
-from src.protocol.Packet.Packet import Packet, send_packet
-from src.protocol.Packet.PacketType import PacketType
-from src.protocol.PacketData.PacketData import PacketData
 
 
 class EnableTwoFA(ft.UserControl):
@@ -54,7 +51,7 @@ class EnableTwoFA(ft.UserControl):
         self.secret_key = generate_secret_token()
 
         # Generate a QR code for the secret key
-        qr_code_filename = "qr_code.png"
+        qr_code_filename = "src/gui/assets/qr_code.png"
         generate_qr_code(self.secret_key, qr_code_filename)
         self.qr_code.src = qr_code_filename
         self.qr_code.fit = ft.ImageFit.CONTAIN,

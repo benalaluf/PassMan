@@ -1,7 +1,7 @@
 from flet_core import UserControl
 
 from src.connections.client_conn import ClientConn
-from src.data.items.password import PasswordData
+from src.data.db.password import PasswordData
 import flet as ft
 
 from src.gui.controls.main_view.vault.passwords.password_data_dialog import PasswordDataDialog

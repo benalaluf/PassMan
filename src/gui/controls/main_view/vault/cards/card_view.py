@@ -1,8 +1,8 @@
 from flet_core import UserControl
 
 from src.connections.client_conn import ClientConn
-from src.data.items.card import CardData
-from src.data.items.password import PasswordData
+from src.data.db.card import CardData
+from src.data.db.password import PasswordData
 import flet as ft
 
 from src.gui.controls.main_view.vault.cards.card_data_dialog import CardDialog

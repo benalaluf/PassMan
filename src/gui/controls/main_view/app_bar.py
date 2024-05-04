@@ -13,7 +13,7 @@ class MainBar(AppBar):
 
 
     def before_update(self):
-        self.user_name_text.value = f"Wellcome, {ClientConn().username}"
+        self.user_name_text.value = f"Wellcome, {ClientConn().user_data.username}"
 
     def init(self):
         self.title = ft.Row(

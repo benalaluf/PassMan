@@ -2,7 +2,7 @@ from flet_core import UserControl
 import flet as ft
 
 from src.connections.client_conn import ClientConn
-from src.data.items.password import PasswordData
+from src.data.db.password import PasswordData
 from src.gui.controls.general.add_button import AddButton
 from src.gui.controls.main_view.vault.passwords.password_container import PasswordContainer
 from src.gui.controls.main_view.vault.passwords.password_form_dialog import PasswordFormDialog
@@ -74,6 +74,7 @@ class PasswordControl(UserControl):
                 pass
 
         self.password_counter.value ="Passwords: " + str(len(self.passwords.controls))
+        print("afeter password befoire update")
 
 
     def build(self):

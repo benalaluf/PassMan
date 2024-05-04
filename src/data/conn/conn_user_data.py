@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 
 @dataclass
@@ -8,3 +8,5 @@ class ConnUserData:
     key_salt: str = None
     key: str = None
     session: str = None
+
+

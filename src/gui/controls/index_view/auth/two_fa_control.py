@@ -16,6 +16,7 @@ class TwoFAControl(ft.UserControl):
                                        color=ft.colors.BLACK,
                                        on_change=self.code_field_on_change)
         self.login_button = ft.ElevatedButton(text="Login", width=200)
+        self.login_button.on_click = self.two_fa
         self.code_field.input_filter = ft.InputFilter(r'[0-9]')
 
         self.code_field.show_cursor = False
@@ -43,9 +44,10 @@ class TwoFAControl(ft.UserControl):
         )
 
     def two_fa(self, e):
+        print("2FA")
         conn = ClientConn()
         result = conn.two_fa(self.code_field.value)
-
+        print(result)
         if result == "Success":
             print("OTP is valid")
             self.page.go('/main/vault/passwords')

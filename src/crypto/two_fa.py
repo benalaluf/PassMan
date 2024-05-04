@@ -23,7 +23,7 @@ if __name__ == "__main__":
     secret_key = generate_secret_token()
 
     # Generate a QR code for the secret key
-    qr_code_filename = "qr_code.png"
+    qr_code_filename = "src/gui/assets/qr_code.png"
     generate_qr_code(secret_key, qr_code_filename)
     print("QR code generated. Scan the QR code with Google Authenticator app.")
 

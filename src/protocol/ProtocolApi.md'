@@ -3,7 +3,7 @@ type: register - login - 2fa
 mail:
 username:
 password
-2fa_code:
+two_fa_code:
 
 POST
 session:
@@ -38,12 +38,12 @@ type: items - key_salt
 
 
 SUCCESS = 69
-type: items - key_salt - session
+type: items - 2fa - auth
 data: {}
 
 
 
 FAIL = 42
-type: items - key_salt - session - login - register
+type: items - auth
 data: str
 

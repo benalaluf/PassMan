@@ -2,7 +2,7 @@ from flet_core import UserControl
 import flet as ft
 
 from src.connections.client_conn import ClientConn
-from src.data.items.card import CardData
+from src.data.db.card import CardData
 from src.gui.controls.general.add_button import AddButton
 from src.gui.controls.main_view.vault.cards.card_form import CardForm
 from src.gui.controls.main_view.vault.cards.card_view import CardView
@@ -61,9 +61,10 @@ class CardsControl(UserControl):
         self.cards.controls.clear()
         print("update cards")
         items = ClientConn().get_user_items()
-        if items.get("card"):
-            for card in items["card"]:
-                self.append_card(CardData(**card))
+        if items:
+            if items.get("card"):
+                for card in items["card"]:
+                    self.append_card(CardData(**card))
 
     def build(self):
         return self.view
