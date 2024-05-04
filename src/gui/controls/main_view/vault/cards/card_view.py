@@ -166,10 +166,6 @@ class CardView(UserControl):
         self.card_dialog.close_dlg()
 
     def edit_card_view(self, card: CardData):
-        self.bank_name_label.value = card.bank_name
-        self.card_number_label.value = "**** **** **** " + card.card_number[-4:]
-        self.card_cvv_label.value = "**" + card.cvv[-1]
-        self.update()
         self.edit_card(card)
 
     def show_delete_button(self, e):

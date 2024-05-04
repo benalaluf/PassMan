@@ -85,7 +85,6 @@ class PasswordContainer(UserControl):
 
     def save_edit_password(self, password_data: PasswordData):
         self.password_data = password_data
-        self.view_dialog.edit_password(password_data)
         self.edit_password_view()
         self.edit_password(password_data)
         self.edit_dialog.close_dlg()

@@ -60,11 +60,7 @@ class PasswordDataDialog(ft.UserControl):
         self.dialog.open = True
         e.control.page.update()
 
-    def edit_password(self, password_data: PasswordData):
-        self.url_label.set_data(password_data.url)
-        self.username_label.set_data(password_data.username)
-        self.password_label.set_data(password_data.password)
-        self.expr_date_label.set_data(password_data.date)
+
 
     def build(self):
         return self.content

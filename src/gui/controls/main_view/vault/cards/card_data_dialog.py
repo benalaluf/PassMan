@@ -118,6 +118,7 @@ class CardDialog(ft.UserControl):
         self.edit_button.update()
         self.bank_name_label.edit()
         self.card_number_label.edit()
+        self.card_cvv_label.edit()
         self.expr_date_label.edit()
 
     def save_card(self, e):
@@ -127,9 +128,11 @@ class CardDialog(ft.UserControl):
         self.edit_button.update()
         self.bank_name_label.view()
         self.card_number_label.view()
+        self.card_cvv_label.view()
         self.expr_date_label.view()
         self.edit_card(self.get_card_data())
         self.set_card_data(self.get_card_data())
+
 
 
 

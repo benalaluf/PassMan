@@ -21,7 +21,7 @@ class DataItemControl(ft.UserControl):
         ]
         )
         self.data_field = ft.TextField(value=self.data, text_size=20,
-                                       border=ft.InputBorder.UNDERLINE)
+                                       border=ft.InputBorder.UNDERLINE, dense=True, content_padding=0)
         self.data_field.visible = False
 
         self.content = ft.Container(
@@ -38,7 +38,8 @@ class DataItemControl(ft.UserControl):
     def set_data(self, data):
         self.data_lable.value = data
         self.data_field.value = data
-        self.update()
+        self.data_lable.update()
+        self.data_field.update()
 
     def get_data(self):
         return self.data_field.value
