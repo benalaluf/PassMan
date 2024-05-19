@@ -53,7 +53,7 @@ class EnableTwoFA(ft.UserControl):
         # Generate a QR code for the secret key
         qr_code_filename = "src/gui/assets/qr_code.png"
         generate_qr_code(self.secret_key, qr_code_filename)
-        self.qr_code.src = qr_code_filename
+        self.qr_code.src = 'qr_code.png'
         self.qr_code.fit = ft.ImageFit.CONTAIN,
         self.qr_button.update()
 

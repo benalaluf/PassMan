@@ -48,7 +48,7 @@ class VaultNavigationRail(UserControl):
                         height=80,
                         border_radius=10,
                         ink=True,
-                        on_click=lambda e: print("Clickable transparent with Ink clicked!"),
+                        on_click=lambda _: self.page.go("/main/vault/notes")
                     ),
                     ft.Container(
                         content=ft.Column(
@@ -60,7 +60,8 @@ class VaultNavigationRail(UserControl):
                         height=80,
                         border_radius=10,
                         ink=True,
-                        on_click=lambda e: print("Clickable transparent with Ink clicked!"),
+                        on_click=lambda _: self.page.go("/main/vault/contacts")
+
                     ),
 
                 ],

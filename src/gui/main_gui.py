@@ -42,6 +42,8 @@ class ClientGUI():
                        "/main/vault": self.main_view.vault_control,
                        "/main/vault/passwords": self.main_view.vault_control.passwords_control,
                        "/main/vault/cards": self.main_view.vault_control.cards_control,
+                       "/main/vault/notes": self.main_view.vault_control.notes_control,
+                       "/main/vault/contacts": self.main_view.vault_control.contacts_control,
                        "/main/security": self.main_view.security_control,
                        "/main/security/2fa": self.main_view.security_control.enable_two_fa,
                        "/main/security/password_breach": self.main_view.security_control.data_breach_checker_control,

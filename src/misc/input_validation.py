@@ -8,4 +8,3 @@ def validate_mail(mail: str) -> bool:
     return bool(re.match(email_regex, mail))
 
 
-print(validate_mail("sdfsdf"))

@@ -4,6 +4,7 @@ import flet as ft
 from src.connections.client_conn import ClientConn
 from src.data.db.card import CardData
 from src.data.db.password import PasswordData
+from src.gui.controls.indevelopment import InDevelopmentControl
 from src.gui.controls.main_view.app_bar import MainBar
 from src.gui.controls.main_view.main_nav import MainNavMenu
 from src.gui.controls.main_view.security.security_control import SecurityControl
@@ -25,6 +26,7 @@ class MainView(View):
         self.vault_control = VaultControl()
         self.security_control = SecurityControl()
         self.settings_control = SettingsControl()
+
 
 
     def update_view(self, items):
