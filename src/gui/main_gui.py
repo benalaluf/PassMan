@@ -25,6 +25,8 @@ class ClientGUI():
         self.page = page
         self.page.padding = 0
         self.page.theme_mode = "light"
+        self.page.window_width = 1200
+        self.page.window_height = 800
 
         self.page.on_route_change = self.route_change
         self.page.on_view_pop = self.view_pop

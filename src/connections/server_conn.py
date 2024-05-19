@@ -192,14 +192,14 @@ class ServerConn:
     def delete_item(self, conn: socket, packet: PacketData):
         session = packet.get("session")
         item_type = packet.get("item_type")
-        item_data = packet.get("item_data")
+        item_data = packet.get("data")
 
         user = jwt_session.verify_jwt(session, self.jwt_secret_key)
         if user:
             print(item_data)
             existing_password = self.users_db.update_one(
-                {"username": user, f"db.{item_type}.id": item_data["id"]},
-                {"$pull": {f"db.{item_type}": {"id": item_data["id"]}}}
+                {"username": user, f"items.{item_type}.id": item_data["id"]},
+                {"$pull": {f"items.{item_type}": {"id": item_data["id"]}}}
             )
 
             print("deleted password object.", existing_password)

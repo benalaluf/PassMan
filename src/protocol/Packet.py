@@ -37,6 +37,8 @@ def send_and_recv_packet(sock: socket.socket, packet: Packet):
     send_packet(sock, packet)
     packet = recv_packet(sock)
     return packet
+
+
 def send_packet(sock: socket.socket, packet: Packet):
     sock.sendall(bytes(packet))
 
@@ -47,7 +49,6 @@ def recv_packet(sock):
 
 
 def __recv_raw_packet(sock):
-
     raw_header = __recv_all(sock, PacketConstants.HEADER_LENGTH)
 
     if not raw_header:
@@ -64,6 +65,8 @@ def __recv_all(sock, data_len):
     while len(data) < data_len:
         packet = sock.recv(data_len - len(data))
         if not packet:
-            return None
+            print("Connection lost")
+            exit(69)
         data.extend(packet)
+
     return data
