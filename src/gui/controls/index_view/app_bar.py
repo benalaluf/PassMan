@@ -18,8 +18,8 @@ class IndexBar(AppBar):
             ft.Container(
                 ft.Row(
                     [
-                        ft.ElevatedButton(text="Login", color="red", on_click=lambda _: self.page.go('/login')),
-                        ft.ElevatedButton(text="Register", color="red", on_click=lambda _: self.page.go('/register'))
+                        ft.ElevatedButton(text="Login", color="red", on_click=lambda _: self.page.go('/auth/login')),
+                        ft.ElevatedButton(text="Register", color="red", on_click=lambda _: self.page.go('/auth/register'))
                     ],
                     spacing=5)
                 , padding=10)

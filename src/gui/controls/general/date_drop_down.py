@@ -37,6 +37,11 @@ class DateDropDown(ft.UserControl):
             alignment=ft.alignment.center
         )
 
+    def get_data(self):
+        return "{}/{}".format(self.month.value, self.year.value)
+    def clear_data(self):
+        self.month.value = ''
+        self.year.value = ''
 
     def build(self):
         return self.content

@@ -1,7 +1,6 @@
 import flet as ft
 from flet_core import UserControl
 
-from src.gui.Data import global_data
 from src.gui.controls.main_view.security.enable_2fa_control import EnableTwoFA
 from src.gui.controls.main_view.security.password_data_breach import PasswordDataBreach
 from src.gui.controls.main_view.security.password_generator import PasswordGenerator

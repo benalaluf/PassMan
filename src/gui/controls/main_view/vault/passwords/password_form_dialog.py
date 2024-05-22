@@ -3,12 +3,13 @@ from datetime import datetime
 import flet as ft
 
 from src.connections.client_conn import ClientConn
-from src.data.items.password import PasswordData
+from src.data.db.password import PasswordData
 
 
 class PasswordFormDialog(ft.UserControl):
 
-    def __init__(self,password_data: PasswordData = None, add_password: callable= None,edit_password:callable=None):
+    def __init__(self, password_data: PasswordData = None, add_password: callable = None,
+                 edit_password: callable = None):
 
         super().__init__()
         self.password_data = password_data
@@ -16,9 +17,9 @@ class PasswordFormDialog(ft.UserControl):
         self.edit_password = edit_password
 
         self.content = None
-        self.url_field = ft.TextField(label="URL/Name")
-        self.username_field = ft.TextField(label="Username")
-        self.password_field = ft.TextField(label="Password")
+        self.url_field = ft.TextField(label="URL/Name", on_change=text_field_on_change)
+        self.username_field = ft.TextField(label="Username", on_change=text_field_on_change)
+        self.password_field = ft.TextField(label="Password", on_change=text_field_on_change)
 
         if password_data:
             self.text = "Password Edit"
@@ -67,14 +68,32 @@ class PasswordFormDialog(ft.UserControl):
         self.dialog.open = True
         e.control.page.update()
 
+    def validate_input(self):
+        valid = True
+        if self.url_field.value == "":
+            self.url_field.error_text = "URL/Name is required"
+            self.url_field.update()
+            valid = False
+        if self.username_field.value == "":
+            self.username_field.error_text = "Username is required"
+            self.username_field.update()
+            valid = False
+        if self.password_field.value == "":
+            self.password_field.error_text = "Password is required"
+            self.password_field.update()
+            valid = False
+        return valid
+
     def add_password_clicked(self, e):
-        if self.add_password:
-            self.add_password(self.get_password_data())
-        else:
-            print(type(self.get_password_data()))
-            self.edit_password(self.get_password_data())
-        self.close_dlg()
-        self.dialog.update()
+        is_valid = self.validate_input()
+        if is_valid:
+            if self.add_password:
+                self.add_password(self.get_password_data())
+            else:
+                print(type(self.get_password_data()))
+                self.edit_password(self.get_password_data())
+            self.close_dlg()
+            self.dialog.update()
 
     def close_dlg(self):
         self.dialog.open = False
@@ -98,3 +117,7 @@ class PasswordFormDialog(ft.UserControl):
 
     def build(self):
         return self.content
+
+def text_field_on_change(e):
+    e.control.error_text = ""
+    e.control.update()

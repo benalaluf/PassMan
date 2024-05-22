@@ -2,8 +2,9 @@ from flet_core import View, AppBar
 import flet as ft
 
 from src.connections.client_conn import ClientConn
-from src.data.items.card import CardData
-from src.data.items.password import PasswordData
+from src.data.db.card import CardData
+from src.data.db.password import PasswordData
+from src.gui.controls.indevelopment import InDevelopmentControl
 from src.gui.controls.main_view.app_bar import MainBar
 from src.gui.controls.main_view.main_nav import MainNavMenu
 from src.gui.controls.main_view.security.security_control import SecurityControl
@@ -27,26 +28,26 @@ class MainView(View):
         self.settings_control = SettingsControl()
 
 
+
     def update_view(self, items):
-        self.main_bar.user_name_text.value = f"Wellcome, {ClientConn().username}"
-        if items:
-            print(items)
-            passwords = items.get('password')
-            cards = items.get('card')
-            if passwords:
-                for password in passwords:
-                    self.vault_control.passwords_control.append_password(PasswordData(**password))
-            if cards:
-                for card in cards:
-                    self.vault_control.cards_control.append_card(CardData(**card))
+        pass
+        # if db:
+        #     print(db)
+        #     passwords = db.get('password')
+        #     cards = db.get('card')
+        #     if passwords:
+        #         for password in passwords:
+        #             self.vault_control.passwords_control.append_password(PasswordData(**password))
+        #     if cards:
+        #         for card in cards:
+        #             self.vault_control.cards_control.append_card(CardData(**card))
+        #
+        #
+        #     if cards:
+        #         pass
 
 
-            if cards:
-                pass
 
-
-
-            self.vault_control.passwords_control.update()
 
 
 

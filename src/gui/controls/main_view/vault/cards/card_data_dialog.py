@@ -1,7 +1,7 @@
 import flet as ft
 
-from src.data.items.card import CardData
-from src.data.items.password import PasswordData
+from src.data.db.card import CardData
+from src.data.db.password import PasswordData
 from src.gui.controls.general.data_item import DataItemControl
 
 
@@ -122,18 +122,39 @@ class CardDialog(ft.UserControl):
         self.expr_date_label.edit()
 
     def save_card(self, e):
-        self.save_button.visible = False
-        self.save_button.update()
-        self.edit_button.visible = True
-        self.edit_button.update()
-        self.bank_name_label.view()
-        self.card_number_label.view()
-        self.card_cvv_label.view()
-        self.expr_date_label.view()
-        self.edit_card(self.get_card_data())
-        self.set_card_data(self.get_card_data())
+        is_valid_input = self.validate_input()
+        if is_valid_input:
+            self.save_button.visible = False
+            self.save_button.update()
+            self.edit_button.visible = True
+            self.edit_button.update()
+            self.bank_name_label.view()
+            self.card_number_label.view()
+            self.card_cvv_label.view()
+            self.expr_date_label.view()
+            self.edit_card(self.get_card_data())
+            self.set_card_data(self.get_card_data())
 
 
+    def validate_input(self):
+        valid = True
+        if self.bank_name_label.get_data() == "":
+            self.bank_name_label.data_field.error_text = "URL/Name is required"
+            self.bank_name_label.data_field.update()
+            valid = False
+        if self.card_number_label.get_data() == "":
+            self.card_number_label.data_field.error_text = "Username is required"
+            self.card_number_label.data_field.update()
+            valid = False
+        if self.card_cvv_label.get_data() == "":
+            self.card_cvv_label.data_field.error_text = "Password is required"
+            self.card_cvv_label.data_field.update()
+            valid = False
+        if self.expr_date_label.get_data() == "":
+            self.expr_date_label.data_field.error_text = "Date is required"
+            self.expr_date_label.data_field.update()
+            valid = False
+        return valid
 
     def build(self):
         return self.content

@@ -7,15 +7,9 @@ from src.crypto import hashing, jwt_session
 from src.crypto.jwt_session import generate_secret_key
 from src.crypto.two_fa import verify_otp
 
-from src.protocol.Packet.Packet import Packet, send_packet, recv_packet
-from src.protocol.Packet.PacketType import PacketType
-from src.protocol.PacketData.AddItemPacketData import AddItemPacketData
-from src.protocol.PacketData.DeleteItemPacketData import DeleteItemPacketData
-from src.protocol.PacketData.GetUserInfoPacketData import GetUserDocPacketData
-from src.protocol.PacketData.LoginPacketData import LoginPacketData
-from src.protocol.PacketData.PacketData import PacketData
-from src.protocol.PacketData.RegisterPacketData import RegisterPacketData
-from src.protocol.PacketData.SessionPacketData import SessionPacketData
+from src.protocol.Packet import Packet, send_packet, recv_packet
+from src.protocol.PacketType import PacketType
+from src.protocol.PacketData import PacketData
 
 
 class ServerConn:
@@ -46,9 +40,9 @@ class ServerConn:
         while True:
             conn, addr = self.server_socket.accept()
             print("got connection")
-            threading.Thread(target=self.sdf, args=(conn,)).start()
+            threading.Thread(target=self.handle_client, args=(conn,)).start()
 
-    def sdf(self, conn: socket):
+    def handle_client(self, conn: socket):
         while True:
             packet = recv_packet(conn)
             self.handel_packet(conn, packet)
@@ -81,17 +75,16 @@ class ServerConn:
 
             if type == "items":
                 self.send_user_data(conn, packetData)
-            if type == "key_salt":
-                self.send_key_salt(conn, packetData)
+
 
     def validate_2fa(self, conn: socket, packet: PacketData):
-        code = packet.get("code")
+        code = packet.get("two_fa_code")
         username = packet.get("username")
 
         user = self.users_db.find_one({"username": username})
         if user:
             if verify_otp(user['2fa'], code):
-                self.send_session_token(conn, user["username"])
+                self.send_auth_success(conn, user["username"])
                 print("2fa validated")
             else:
                 self.send_fail(conn, "2fa")
@@ -119,7 +112,7 @@ class ServerConn:
             if user.get("2fa"):
                 self.send_success(conn, "login", "2fa")
             else:
-                self.send_session_token(conn, user["username"])
+                self.send_auth_success(conn, user["username"])
         else:
             print("Login failed")
             self.send_fail(conn, "login")
@@ -138,17 +131,18 @@ class ServerConn:
             data["password"] = pass_hash
             data.pop("type")
             self.users_db.insert_one(data)
-            self.send_session_token(conn, data["username"])
+            self.send_auth_success(conn, data["username"])
             print("user register")
         else:
             self.send_fail(conn, "register")
             print("register failed")
 
-    def send_session_token(self, conn: socket, username: str):
+    def send_auth_success(self, conn: socket, username: str):
+        user = self.users_db.find_one({"username": username})
         session_token = jwt_session.generate_jwt(username, self.jwt_secret_key)
         data = {
-            "type": "session",
-            "data": session_token
+            "type": "auth",
+            "data": {'session': session_token, 'key_salt':user['key_salt']}
         }
         packetData = PacketData(data)
         packet = Packet(PacketType.SUCCESS, bytes(packetData))
@@ -156,11 +150,12 @@ class ServerConn:
 
     def add_2fa_token(self, packet: PacketData):
         session = packet.get("session")
+        two_fa_token = packet.get("data").get("two_fa_token")
         user = jwt_session.verify_jwt(session, self.jwt_secret_key)
         if user:
             self.users_db.update_one(
                 {"username": user},
-                {"$set": {"2fa": packet.get("data")}}, upsert=True
+                {"$set": {"2fa": two_fa_token}}, upsert=True
             )
             print("2fa token added")
         else:
@@ -169,7 +164,8 @@ class ServerConn:
     def add_item(self, conn: socket, packet: PacketData):
         session = packet.get("session")
         item_type = packet.get("item_type")
-        item_data = packet.get("item_data")
+        item_data = packet.get("data")
+        print(packet)
 
         user = jwt_session.verify_jwt(session, self.jwt_secret_key)
         if user:
@@ -196,7 +192,7 @@ class ServerConn:
     def delete_item(self, conn: socket, packet: PacketData):
         session = packet.get("session")
         item_type = packet.get("item_type")
-        item_data = packet.get("item_data")
+        item_data = packet.get("data")
 
         user = jwt_session.verify_jwt(session, self.jwt_secret_key)
         if user:
@@ -213,6 +209,7 @@ class ServerConn:
         session = packet.get("session")
 
         username = jwt_session.verify_jwt(session, self.jwt_secret_key)
+        print("jwt user", username)
         user = self.users_db.find_one({"username": username})
         if user:
             if user.get("items"):
@@ -222,30 +219,18 @@ class ServerConn:
                     "data": user["items"]
                 }
                 packetData = PacketData(data)
-
                 packet = Packet(PacketType.SUCCESS, bytes(packetData))
                 send_packet(conn, packet)
+                print("sent items")
+                print(data)
             else:
-                print("No items found")
+                print("no items found")
                 self.send_fail(conn, "items")
+
         else:
             print("got unauthrized request")
 
-    def send_key_salt(self, conn: socket, packet: PacketData):
-        session = packet.get("session")
-
-        username = jwt_session.verify_jwt(session, self.jwt_secret_key)
-        user = self.users_db.find_one({"username": username})
-        if user:
-            user.pop("_id")
-            data = {
-                "type": "key_salt",
-                "data": user["key_salt"]
-            }
-            packetData = PacketData(data)
-
-            packet = Packet(PacketType.SUCCESS, bytes(packetData))
-            send_packet(conn, packet)
+            self.send_fail(conn, "items")
 
     def send_fail(self, conn: socket, fail_type: str):
         data = {

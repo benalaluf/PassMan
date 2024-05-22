@@ -2,7 +2,6 @@ import flet as ft
 from flet_core import UserControl
 
 from src.connections.client_conn import ClientConn
-from src.gui.Data import global_data
 from src.gui.controls.main_view.setttings.settings_button import SettingsButton
 from src.gui.controls.main_view.setttings.settings_switch import SettingsSwitch
 

@@ -1,8 +1,8 @@
 from flet_core import UserControl
 
 from src.connections.client_conn import ClientConn
-from src.data.items.card import CardData
-from src.data.items.password import PasswordData
+from src.data.db.card import CardData
+from src.data.db.password import PasswordData
 import flet as ft
 
 from src.gui.controls.main_view.vault.cards.card_data_dialog import CardDialog
@@ -48,7 +48,7 @@ class CardView(UserControl):
 
         if card_vendor == "visa":
             self.img = ft.Image(
-                src=f"images/visa.png",
+                src=f"icons/visa.png",
                 width=80,
                 height=80,
                 fit='contain',
@@ -57,7 +57,7 @@ class CardView(UserControl):
 
         elif card_vendor == "mastercard":
             self.img = ft.Image(
-                src=f"images/mastercard.png",
+                src=f"icons/mastercard.png",
                 width=60,
                 height=60,
                 fit='contain'
@@ -66,7 +66,7 @@ class CardView(UserControl):
 
         elif card_vendor == "amex":
             self.img = ft.Image(
-                src=f"images/amex.png",
+                src=f"icons/amex.png",
                 width=60,
                 height=60,
                 fit='contain'
@@ -166,10 +166,6 @@ class CardView(UserControl):
         self.card_dialog.close_dlg()
 
     def edit_card_view(self, card: CardData):
-        self.bank_name_label.value = card.bank_name
-        self.card_number_label.value = "**** **** **** " + card.card_number[-4:]
-        self.card_cvv_label.value = "**" + card.cvv[-1]
-        self.update()
         self.edit_card(card)
 
     def show_delete_button(self, e):
