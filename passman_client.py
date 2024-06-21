@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from src.app.client_app import ClientPassmanApp
 
 passman_client = ClientPassmanApp()

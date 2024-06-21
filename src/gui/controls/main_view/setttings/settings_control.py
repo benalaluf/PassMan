@@ -19,7 +19,7 @@ class SettingsControl(UserControl):
             ft.Column(
                 controls=[
                     self.enable_dark_mode,
-                    self.export_password
+                    # self.export_password
                 ],
                 expand=True,
                 spacing=5,
@@ -44,7 +44,7 @@ class SettingsControl(UserControl):
         e.control.page.update()
 
     def export_password(self, e):
-        print(ClientConn().client_items)
+        print("in development")
 
     def clear_clipboard(self, e):
         self.page.set_clipboard("")
